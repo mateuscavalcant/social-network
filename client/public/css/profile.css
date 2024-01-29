@@ -397,13 +397,27 @@ body {
 
 #follow-btn {
   margin-right: 10px;
-  margin-top: 70px;
-  background-color: #000000;
+  margin-top: 80px;
+  background-color: #77C3EC;
   color: #ffffff;
   font-weight: bold;
   border: 1px solid #77C3EC;
-  border-radius: 17px;
-  padding: 9px 15px;
+  border-radius: 19px;
+  padding: 9px 18px;
+  cursor: pointer;
+
+}
+
+
+#following-btn {
+  margin-right: 10px;
+  margin-top: 80px;
+  background-color: #ffffff;
+  color: #000000;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  border-radius: 19px;
+  padding: 9px 18px;
   cursor: pointer;
 
 }
@@ -411,4 +425,8 @@ body {
 #follow-btn:hover {
   background-color: #9DD9F3;
   border: 1px #9DD9F3;
+}
+
+#following-btn:hover {
+  background-color: #ccc;
 }
