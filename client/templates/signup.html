@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Signup Form</title>
+    <link rel="stylesheet" href="client/public/css/style.css">
+
+</head>
+
+<body>
+    <section class="container forms">
+        <div class="form signup-link">
+            <div class="form-content">
+                <header>Signup</header>
+                <form id="signup-form" method="post" action="/signup">
+                    <div class="field input-field">
+                        <input type="text" id="name" name="name" placeholder="Name" class="input">
+                        <span id="error-name" class="error-message"></span>
+                    </div>
+
+                    <div class="field input-field">
+                        <input type="text" id="username" name="username" placeholder="Username" class="input">
+                        <span id="error-username" class="error-message"></span>
+                    </div>
+
+                    <div class="field input-field">
+                        <input type="email" id="email" name="email" placeholder="E-mail" class="input">
+                        <span id="error-email" class="error-message"></span>
+                    </div>
+
+                    <div class="field input-field">
+                        <input type="password" id="password" name="password" placeholder="Create password"
+                            class="password">
+                        <span id="error-password" class="error-message"></span>
+                    </div>
+
+                    <div class="field input-field">
+                        <input type="password" id="confirm_password" name="confirm_password"
+                            placeholder="Confirm password" class="password">
+                        <span id="error-confirm-password" class="error-message"></span>
+                    </div>
+
+                    <div class="field button-field">
+                        <button type="submit">Signup</button>
+                    </div>
+                </form>
+                <div class="form-link">
+                    <span>Already have an account? <a href="/login" class="link signup-link">Login</a></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="client/js/signup.js"></script>
+</body>
+
+</html>

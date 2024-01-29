@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Profile</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="client/public/css/profile.css">
+
+</head>
+
+<body>
+  <div id="profile-header-container"></div>
+  <div id="user-profile-container"></div>
+  <div id="posts-container"></div>
+  <div class="bar-btn-container">
+    <div class="bar-btn horizontal-bar">
+      <button id="home-btn">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAAAXNSR0IArs4c6QAAAbFJREFUWEft1zsvBUEUwPH/rXwCj1B4NEoSHYnCV1Dp9VpREFHcQuUDqDW+gFaCTqjQeCXiEb1EgRyZuZmMmZ3Xrlxyp9li5/Hbc05mZlt0WWt1mYd/CZoEdoFPYBm4Kol6aYQmgGNgUCGegVngOhdVArIx2lCEygVJmg6BAaW4U89R9XwB5nPSlwOyI/MAzCnIETBSkr5UkA9jRqgIlQIKYXQNSdqyUbGgWEwxKgaUiilChUC5mGxUFagUk4XygerCJKNcIHvTk0nHgdvc40CNGwNujDmcm6cN8h0HoVqLtcoBbLYfx4y90CUgEbJbUyBZ5xyY1gvaC50BU78MOgVmfCDJ8xLQB2wYMBveDywCQ55cPQH7wKv13kzZJvAG7AH3PpA53hxsgiSCB8YdyFc/gloALowOvjk7XapqwzfYl1YX7ERd2PS7RkAf0LmLS9hdTaf7XaW/UVDwK9X92lUWwbE5KQtO2gNVbAehWglGt5eyUHT/VIRkp9V/pLGneWy/R2DY1bkqQm1gNXaFxH5bwHoqSLBrwAogh2kdTX4qd4Bt32R13XPqwH7P0QOFQvkFjmiEJTam5Q4AAAAASUVORK5CYII="
+          alt="" srcset="">
+      </button>
+      <button id="profile-btn">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAABwUlEQVRYR+2XgU3DQAxF2w1gg7IBTEDZADYoEwATECaADSgTwAawAWUCugGMwH9whwK95OxLgqIKS1YU1fa9/nMuznQyMpuOjGeyVUA7UnchP5TP5Nyv5C/yqlT5UoX2teCtnGvKADsNgC62EiDUeA6K5BbbU8A6F1T/vQToXgWOjYug1IEx9jPMCzRXzqNnAcWeyB+sOV6gcxW+thYPcVe6VtYcL5BnuyID6qCSybxAqINKHlsqmCfOZF4gmhmVPAYMUCbzAnH4vZkqfwW9y9muJ2uOF4i6nsZ2NTTFS4DIszQ3qqAOKpmtFKhNKQBQ5sZMUQvsAhTL0OizcIMqa68qdfA+gEqEaMzZCiC2h7GDK8dAyugjXqxsH242j0ILVT0LMOYFFEhf3cmXliQLECrwygCoiwHGqd2qWA6IrWHcaNoaL2D25G4DAuK1R5gIDxRDW1KpNiDLaexVKMazfUep5CYg+oUhfkhLTpJNQPTNfEga1Wbrdn+vkQKikfmq+Avb+CpJAZUMYaXwF0r88RJOAXnmnVKQmGcCqhR92XUlY/7GAJdSiGYeuqHrjz9HwLflTmrjH+0v7B8op+XoFPoALyFCJRWbEcUAAAAASUVORK5CYII="
+          alt="Profile">
+      </button>
+      <button id="search-btn">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAACJElEQVRYR+2WgU0DMQxF2w1gg2MD2KBMAExA2QAmoEwATEA3ACagTABMQDeADeA/KZEic3d2eqgUqZasXttL8vxtJxmPNszGG8Yz+tdAO1JzIj+VN8kReJn8UZ8P8s8hqkcUAuRSPpXz7NmNXrhNkN67P/73gFDkPghiJz9JilVB9QGdJ2VKVRb67TktRKqwRg44qdw3q5/p+7yGqAvIKkNdXMlJR58RxLV5oUqpNiAUeZdnZV71zKRZES9gxpFmgsII5iA6vg1opsEUcZ7sUA9A1RhQH8WAuZ5Jn2sWyKpzoRm8NHUtcpyUyv/vRVSyQOUk7CmkaoiROubEQsFZoHICing2hEZjp/K7NEcoQAv0osG5dSnE2tqx/GUtUdy7XoAWiO5q0qBQzp0FBgPRGbndiWbQuZRgv9LnSgr9dspQG9Ux0k8Z9JpNGQVIIWKhrnDmL7t2rnfdvcgCAZO7IhSRAzS47e0OW3UOGbgyuPDx0XZ0lGkLT2Rg7I4f3tO6DtfyHFrlcCWovEMTFFtIqGP7rh9PJurI3WaiMfZCt9BvHNAh8y5o9m7D9s/dmUWWclKDs7tzQcuq2MU5oOla1yJXWKuUO2lKD6lGsWwhKA+IyVAApaYBEuqEAp4nqLJBGO5CRYAyB2BAHcmb5AAs5ajxJielfC+tCqoGKCBQ5ythqHUBQRqCWieQhWqtp3UDZShqr3Ub+Aug3lrcAnmtulXIU+gbL7Z4JTYTC/QAAAAASUVORK5CYII="
+          alt="" srcset="">
+      </button>
+      <button id="post-btn">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAACvElEQVRYR+2XgXHUMBBFkw6gg6MDUgGmgoQOjgoSKuCoADrAqQBSAaYC0kHcQegA/stob9ay5JUNM8kw7MzO+c7S6unvruw7PXlidvrEeE7+GaBOyuKv5M/ku6T0qE/za13frs3AGoVY+EJ+KX/ZuNBPjXsn7xvHN6cMNT6uAMnXR6kP8q8RWItCVwryPqXG4rHzQU5aLEXcI3X4eVITVb0BdViCioA+a/LeBQCEoL2c68jYDCkG0mzQxevaxCUggpEmH+hNI0i+3hf9QP2ZUVefSlA1ICajjknOZJRpUaW2+VxtNjerqRIQEN/k1klIvKRMp/s4xli8Zl4pNvc8H1gC8qli0otAmYPuU/RYVLRs9od8l8a/1WfvoUpAd25CtACx1gAxfi8nfdhMpRyINLEDGxypswWIOX7TZ/p+PNFzIL9bCo7aiWytQsSjeykNjIah6x4sB/JFV+yCAt0WILqYtbBBfjyXciDSZd01kVK/d8lzJh6w3LPg3wvQLIqbUdz36cukjnIgn1vqZ3RBDrq2biqsufhT3hzNQFDbYcgZ4Q/CvwkE/S+3haMwj5WynWDIBkYWyMaD5UCc0F26Nzu0KknxyrWcW4RpLmrfjr0mAhXZFiA/Z7HtvZTFZ02BbguQb57J8RI9OlrSthbIp2v2rCwB7aVC9VnzhwrlbxKzmqu9D3lJB0EcT9ICEE1gjcBYvGb+nWjUIA7fyTtWDYgF6DizSeFFVV65719rGFJ8a6wBMcF3HN8jpWqcpIlY+5YNLgExv/SS3/o/CxCei8TYOZg+qTNJld2PgBh3kOfPMIIR+EY+JgcAZ/FOzl8he1DbeqSeQi7CMKgFiHG0KrL7nbpNh5cANCnbCmQr5oUZkQCCIqhZVcUHWQtkc1GMdPAuhGo4C5oPur6Wj60gFngrUKTM5vv/gSLpfgMJvq4lmI18OQAAAABJRU5ErkJggg=="
+          alt="" srcset="">
+      </button>
+      <button id="configure-btn">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAADIklEQVRYR92XgXHUQAxFkw6gA9MBdHBUAFSAqQBSQY4KCBWQVABUkOsAOsAdkA6I3o3/8W+ttZ2FYW7QzM5411rpS/qS787PTkzOTwzP2X8FaBPZ/RCri/XIMv0lnt/H+t6S/dYMAeBHAcT938XmWazhoaBaAfXh6NOCs4t4f/WvAG3D0eXojPKwR2rnq3EtZYjSwBHxgT1AyJB4UwMECDJEphDZGuKZkqYyB4ho35pjjG9iPS0svYo9REZ4f1u8B8Au1kuz5UEcqdcA9aG1xBGcfI1V8oS7ZLFLU/D70AM5nGaASO03M0h6va3Zv7Gs1PwCjLHgd8mWgGLnSayj8mWAtmOEOMIA7Yvx1+NlwHC+RgADKMp8E+s6lgfLHnsHyQAxXxQFylyqCbwAKPo4h/yUcenO59Eg2Xk8BwijP02ZDsmMowfHAJQJwJ7HyrppE+dOfMo2yMhShtDbjcbdMRHWwEivvJcFARAAHSQDRL2JwMlItDhA+ljqQDJAC/OOZ0DCGYmXHLvwR5I2x9wconQC5YA8O9k8eWegmE+0N9LFgp9I2mG8mAPk5PY6184VeclDkdbPh1A+KpUurwWEURG0FRA+f42OHwyIaHxeMIvoHAT+9ONz9kX3ku1Cj3IjzqFJu89liIvwpJPSaBTjCMTVHGHvowGgfDbEPedYRmrAKtC98axkdNjGwAAEYvpMKXVM/fC45t4Q2ottrzp79OWAIwNkyYE7KMDUPjFk0T/czs80Q97u6RfZPMOXF7EoB0L69ekog9A1L/mk/bOSOWlFPjLBwCNyeFFzVpaOTOqnCECZS5RbAVzFs37A7e9mgMoOw7lIyh32lAPjc0IQBNeZ0mD7SXZqgDgvOylzTLZuYl0XLwGinxxzgLMpPzupMQpHlBUygjOPmHfOsywQMsHd3mwRxFGphHxuUqNDqag3ZBVvtvGsfxzoeKT+Dn0cO+cIiHPspbIEqHbPHdcATQhbM+bnrYDWcMx/eqzBstdpBUQp9csyc0ZZJp+FNahaAWEbbtHWmimciR8f43lpLPxVDq0JtknnTzLU5HDp0skBuge2V8klOAZ8FAAAAABJRU5ErkJggg=="
+          alt="" srcset="">
+      </button>
+      <button id="logout-btn">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAAAXNSR0IArs4c6QAAAXtJREFUWEftmM8qxUEUxz93wUtRrChFHkJJsrBkg4VYWshCdh7AyoYNIhTPQfECZKFvjZr7a+Y3c+4d/GhO3cVtzp9P55w5M/Pr0THpdYyHCpSqSFuGJoAxYDTlxLj+DlwDVyG7GNA+sGwMZFXfA1abRiGgeeDE6n1A/WngzLcNAa0D207pErgYMFjMbBJQO0gUaycFtAlsOKUtQP9LSqv/UIYq0L8v2SLwADxmNpq5h7QL9JNoh6V2mQKsAQvAcQaUGSjDZ5+KH+DQDdSPFic/CiSOO2AOeIlAmYH8kuVkyx90X/rPgCb+fcCBGcg3yAGK6egQDfXVrwGpj5aAowaxGahEyV5dH92WKJm1TM0Sax7NAk+lmnoYIM0h9Y36JyZDlcwyGFcAzaGUmIGsp71uliqT5k+OfDtQDoSvU4FSGfv7GercJX8GOE3lvdD6FHDu+4o9FA/cOVQobtDNrrvY9S2mntLjwEhhqjf3jL4J+a1fP1LZrhlKZegTy9N2JYd/DD8AAAAASUVORK5CYII="
+          alt="" srcset="">
+      </button>
+    </div>
+  </div>
+  <script src="client/js/profile.js"></script>
+  <script src="client/js/logout.js"></script>
+</body>
+
+</html>

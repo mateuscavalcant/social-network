@@ -1,5 +1,4 @@
 package models
-
 type User struct {
 	ID              int    `json:"id"`
 	Username        string `json:"username" binding:"required, min=4,max=32"`
@@ -10,19 +9,35 @@ type User struct {
 	ConfirmPassword string `json:"cpassword" binding:"required"`
 }
 
-type Login struct {
+type UserLogin struct {
 	Credential string `json:"credential"`
 	Password   string
 }
 
-type Follow struct {
+type UserFollow struct {
 	FollowID int `json:"follow-id"`
 	FollowBy int `json:"follow-by"`
 	FolloTo  int `json:"follow-to"`
 }
 
-type Post struct {
-	PostID  int    `json:"post-id"`
-	UserID  int    `json:"user-id"`
-	Content string `json:"content"`
+
+type UserPost struct {
+	PostID     int    `json:"post-id"`
+	PostUserID int    `json:"post-user-id"`
+	UserID     int    `json:"user-id"`
+	Content    string `json:"content"`
+	CreatedBy  string `json:"createdby"`
+	Name       string `json:"createdbyname"`
+}
+
+type UserProfile struct {
+	ID            int    `json:"user-id"`
+	Name          string `json:"name"`
+	Username      string `json:"username"`
+	Email         string `json:"email"`
+	Bio           string `json:"bio"`
+	Posts         int    `json:"countposts"`
+	FollowBy      bool   `json:"followby"`
+	FollowByCount int    `json:"followbycount"`
+	FollowToCount int    `json:"followtocount"`
 }
