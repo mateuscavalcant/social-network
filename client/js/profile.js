@@ -21,7 +21,7 @@ function loadPostsProfile() {
       $("#profile-header-container").append($userHeaderDetails);
       var userDetailsHTML = `<div class="user">
         <header>
-          <img src="client/public/images/icon-other-profile.jpeg" class="user-icon">
+          <img src="client/public/images/gopher.jpeg" class="user-icon">
           <div class="user-title">
             <p>@${data.profile.username}</p>
           </div>
@@ -52,7 +52,7 @@ function loadPostsProfile() {
       data.posts.forEach(function (post) {
         var postHTML = `<div class="post">
           <header>
-            <img src="client/public/images/icon-other-profile.jpeg" class="profile-icon">
+            <img src="client/public/images/gopher.jpeg" class="profile-icon">
             <div class="post-title">
               <div class="user-name-post">
                 <p class="name-user${post.postID}">${post.createdbyname}</p>

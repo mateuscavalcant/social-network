@@ -287,7 +287,7 @@ body {
   left: 15px;
 }
 
-#profile-btn {
+#search-btn {
   background-color: #ffffff;
   position: fixed;
   color: white;
@@ -299,7 +299,7 @@ body {
   left: 191px;
 }
 
-#post-btn {
+#profile-btn {
   background-color: #ffffff;
   position: fixed;
   color: white;
@@ -335,7 +335,7 @@ body {
   left: 455px;
 }
 
-#search-btn {
+#home-btn {
   background-color: #ffffff;
   position: fixed;
   color: rgb(0, 0, 0);

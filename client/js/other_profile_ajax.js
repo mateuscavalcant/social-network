@@ -62,6 +62,7 @@ function loadProfile(username) {
 
                                 $("#following-btn").text("Follow").prop("disabled", false);
                                 console.log("Unfollowed successfully:", response);
+                                location.reload();
                             },
                             error: function () {
                                 $("#follow-btn").prop("disabled", false);
@@ -118,10 +119,12 @@ function loadProfile(username) {
 
                                 $("#follow-btn").text("Following").prop("disabled", false);
                                 console.log("Followed successfully:", response);
+                                location.reload();
                             },
                             error: function () {
                                 $("#follow-btn").prop("disabled", false);
                                 console.log("Error following user");
+
                             }
                         });
                     });
@@ -147,9 +150,9 @@ function loadProfile(username) {
                     '<p>' + post.content + '</p>' +
                     '</div>' +
                     '<div class="post-links">' +
-                    '<img src="" alt="Comentário" class="comment-button" data-post-id="' + post.postID + '">' +
-                    '<img src="" alt="Comment">' +
-                    '<img src="" alt="Curtir" class="like-button" data-post-id="' + post.postID + '">' +
+                    '<img src="client/public/images/message.png" alt="Comentário" class="comment-button" data-post-id="' + post.postID + '">' +
+                    '<img src="client/public/images/repost.png" alt="Comment">' +
+                    '<img src="client/public/images/like.png" alt="Curtir" class="like-button" data-post-id="' + post.postID + '">' +
                     '</div>' +
                     '</main>' +
                     '<footer>' +
