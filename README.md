@@ -1,2 +1,3 @@
-# social-network-go
-Building the server of a social network
+## Building a mini social network...
+
+<img align="right" width="200px" src="client/public/images/gopherjs.png">
