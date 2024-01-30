@@ -51,9 +51,7 @@ func CreateProfile(c *gin.Context) {
 		c.JSON(500, gin.H{"error": "Failed to create user"})
 		return
 	}
-
 	c.JSON(200, gin.H{"message": "Profile created successfully"})
-
 }
 
 func AnotherUserProfile(c *gin.Context) {
@@ -123,7 +121,6 @@ func AnotherUserProfile(c *gin.Context) {
 		posts := []models.UserPost{}
 
 		query := "SELECT user_post.post_id, user_post.id AS user_post_id, user_post.content, user.id AS user_id, user.username, user.name FROM user_post JOIN user ON user.id = user_post.id WHERE user.id = ?"
-
 		rows, err := db.Query(query, id)
 		if err != nil {
 			log.Println("Failed to query statement", err)
@@ -132,6 +129,7 @@ func AnotherUserProfile(c *gin.Context) {
 			})
 			return
 		}
+		
 		defer rows.Close()
 
 		for rows.Next() {
@@ -143,9 +141,6 @@ func AnotherUserProfile(c *gin.Context) {
 				})
 				return
 			}
-			log.Println("@", post.CreatedBy)
-			log.Println("Name:", post.Name)
-
 			posts = append(posts, post)
 		}
 
@@ -156,6 +151,7 @@ func AnotherUserProfile(c *gin.Context) {
 			})
 			return
 		}
+
 		countPosts := len(posts)
 		user.Posts = countPosts
 
@@ -321,7 +317,6 @@ func Profile(c *gin.Context) {
 	posts := []models.UserPost{}
 
 	query := "SELECT user_post.post_id, user_post.id AS user_post_id, user_post.content, user.id AS user_id, user.username, user.name FROM user_post JOIN user ON user.id = user_post.id WHERE user.id = ?"
-
 	rows, err := db.Query(query, id)
 	if err != nil {
 		log.Println("Failed to query statement", err)
@@ -373,7 +368,6 @@ func RenderProfileTemplate(c *gin.Context) {
 
 	db := CON.DB()
 
-	// Verifique se o usuário existe
 	queryExist := "SELECT COUNT(*) FROM user WHERE username = ?"
 	var count int
 	err := db.QueryRow(queryExist, username).Scan(&count)
@@ -386,12 +380,10 @@ func RenderProfileTemplate(c *gin.Context) {
 	}
 
 	if count == 0 {
-		// Renderize o template notexistuser.html se o usuário não existir
 		c.HTML(http.StatusOK, "notfounduser.html", gin.H{})
 		return
 	}
 
-	// Verifique se o usuário pertence à sessão
 	var userSession models.User
 	queryUserSession := "SELECT id, username FROM user WHERE id = ?"
 	err = db.QueryRow(queryUserSession, id).Scan(&userSession.ID, &userSession.Username)
@@ -404,14 +396,12 @@ func RenderProfileTemplate(c *gin.Context) {
 	}
 
 	if userSession.Username != username {
-		// Renderize o template anotheruserprofile.html se o usuário não pertencer à sessão
 		c.HTML(http.StatusOK, "other_profile.html", gin.H{
 			"username": username,
 		})
 		return
 	}
 
-	// Renderize o template profile.html com os dados
 	c.HTML(http.StatusOK, "profile.html", gin.H{
 		"username": username,
 	})

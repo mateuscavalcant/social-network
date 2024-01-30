@@ -12,5 +12,4 @@ func Logout(c *gin.Context) {
 	delete(session.Values, "id")
 	delete(session.Values, "email")
 	session.Save(c.Request, c.Writer)
-
 }

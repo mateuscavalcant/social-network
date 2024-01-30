@@ -38,7 +38,5 @@ func ExistEmail(c *gin.Context) {
 		c.JSON(400, resp)
 		return
 	}
-
 	c.JSON(200, gin.H{"message": "Email Validad"})
-
 }

@@ -46,18 +46,25 @@ document.getElementById("signup-form").addEventListener("submit", function (even
         method: "POST",
         body: formData
     })
+        // Exibe as mensagens de erro correspondentes nos campos do formulário
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                // Exibe as mensagens de erro correspondentes nos campos do formulário
+                document.getElementById("error-username").textContent = data.error.missing;
+                document.getElementById("error-name").textContent = data.error.missing;
+                document.getElementById("error-email").textContent = data.error.missing;
+                document.getElementById("error-password").textContent = data.error.missing;
+                document.getElementById("error-confirm-password").textContent = data.error.missing;
+            } else if (data.error) {
                 document.getElementById("error-username").textContent = data.error.username;
                 document.getElementById("error-name").textContent = data.error.name;
                 document.getElementById("error-email").textContent = data.error.email;
                 document.getElementById("error-password").textContent = data.error.password;
                 document.getElementById("error-confirm-password").textContent = data.error.confirm_password;
+
             } else {
                 console.log(data.message);
-                window.location.href = "/home";
+                window.location.replace("/home");
             }
         })
         .catch(error => {

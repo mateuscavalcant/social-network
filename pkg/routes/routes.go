@@ -23,5 +23,4 @@ func InitRoutes(r *gin.RouterGroup) {
 	r.GET("/:username", handlers.RenderProfileTemplate)
 	r.POST("/profile", handlers.Profile)
 	r.POST("/profile/:username", handlers.AnotherUserProfile)
-
 }

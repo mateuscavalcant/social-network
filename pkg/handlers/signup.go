@@ -34,8 +34,8 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	if username == "" {
-		resp.Error["username"] = "Some values are missing!"
+	if username == "" || name == "" || email == "" || password == "" || confirmPassword == ""  {
+		resp.Error["missing"] = "Some values are missing!"
 	}
 
 	if len(username) < 4 || len(username) > 32 {

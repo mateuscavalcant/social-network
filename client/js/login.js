@@ -19,7 +19,7 @@ document.getElementById("login-form").addEventListener("submit", function (event
                 document.getElementById("error-password").textContent = data.error.password;
             } else {
                 console.log(data.message);
-                window.location.href = "http://localhost:8080/home";
+                window.location.replace("/home");
             }
         })
         .catch(error => {

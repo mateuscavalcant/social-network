@@ -20,7 +20,6 @@ type UserFollow struct {
 	FolloTo  int `json:"follow-to"`
 }
 
-
 type UserPost struct {
 	PostID     int    `json:"post-id"`
 	PostUserID int    `json:"post-user-id"`

@@ -15,7 +15,6 @@ func Follow(c *gin.Context) {
 
 	db := CON.DB()
 
-	// Query to get the ID of the user being followed
 	var userID int
 	err := db.QueryRow("SELECT id FROM user WHERE username = ?", username).Scan(&userID)
 	if err != nil {
@@ -26,7 +25,6 @@ func Follow(c *gin.Context) {
 		return
 	}
 
-	// Insert into user_follow using the retrieved userID
 	stmt, err := db.Prepare("INSERT INTO user_follow(followBy, followTo) VALUES(?, ?)")
 	if err != nil {
 		log.Println("Failed to prepare statement", err)
@@ -74,6 +72,7 @@ func Unfollow(c *gin.Context) {
 		})
 		return
 	}
+	
 	_, err = stmt.Exec(id, userID)
 	if err != nil {
 		log.Println("Failed to query statement", err)
@@ -81,7 +80,6 @@ func Unfollow(c *gin.Context) {
 			"error": "Failed to execute query",
 		})
 		return
-
 	}
 
 	resp := map[string]interface{}{
