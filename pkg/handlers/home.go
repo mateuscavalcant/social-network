@@ -75,8 +75,6 @@ func Feed(c *gin.Context) {
 	})
 }
 
-
-
 func CreateNewPost(c *gin.Context) {
     var userPost models.UserPost
     errresp := errs.ErrorResponse{
@@ -146,56 +144,4 @@ func CreateNewPost(c *gin.Context) {
         "mssg":   "Post Created!!",
     }
     c.JSON(http.StatusOK, resp)
-}
-
-
-func DeletePost(c *gin.Context) {
-	postID := c.PostForm("post")
-	userIDInterface, _ := utils.AllSessions(c)
-
-	if userIDInterface == nil {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": "Unauthorized",
-		})
-		return
-	}
-
-	userID, err := strconv.Atoi(userIDInterface.(string))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Invalid user ID",
-		})
-		return
-	}
-
-	db := CON.DB()
-
-	var postAuthorID int
-	err = db.QueryRow("SELECT id FROM user_post WHERE postID=?", postID).Scan(&postAuthorID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to fetch post details",
-		})
-		return
-	}
-
-	if postAuthorID != userID {
-		c.JSON(http.StatusForbidden, gin.H{
-			"error": "You don't have permission to delete this post",
-		})
-		return
-	}
-
-	_, err = db.Exec("DELETE FROM user_post WHERE postID=?", postID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to delete post",
-		})
-		return
-	}
-
-	resp := map[string]interface{}{
-		"mssg": "Post Deleted!",
-	}
-	c.JSON(http.StatusOK, resp)
 }
