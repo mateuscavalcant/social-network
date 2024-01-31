@@ -1,11 +1,14 @@
 package validators
 
 import (
+	"encoding/base64"
+	"regexp"
 	CON "social-network-go/pkg/database"
 
 	"github.com/badoux/checkmail"
 	"golang.org/x/crypto/bcrypt"
 )
+
 
 func Hash(password string) []byte {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -21,6 +24,11 @@ func ValidateFormatEmail(email string) error {
 		return err
 	}
 	return nil
+}
+
+func ValidateFormatUsername(username string) bool {
+	regex := regexp.MustCompile("^[a-zA-Z0-9]+$")
+	return regex.MatchString(username)
 }
 
 func ExistEmail(email string) (bool, error) {
@@ -41,9 +49,16 @@ func ExistUsername(username string) (bool, error) {
 
 	var userCount int
 
-	err := db.QueryRow("SELECT COUNT(id) AS userCount FROM users1 WHERE username=?", username).Scan(&userCount)
+	err := db.QueryRow("SELECT COUNT(id) AS userCount FROM users WHERE username=?", username).Scan(&userCount)
 	if err != nil {
 		return false, err
 	}
 	return userCount > 0, nil
 }
+
+
+func ConvertByteToBase64(x []byte) string {
+    iconBase64 := base64.StdEncoding.EncodeToString(x)
+    return iconBase64
+}
+

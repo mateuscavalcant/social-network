@@ -1,13 +1,12 @@
 package handlers
 
 import (
+	"io/ioutil"
 	"log"
 	CON "social-network-go/pkg/database"
 	"social-network-go/pkg/models"
 	"social-network-go/pkg/models/errs"
-	"social-network-go/pkg/utils"
 	"social-network-go/pkg/validators"
-	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -70,29 +69,32 @@ func Signup(c *gin.Context) {
 		return
 	}
 
+	fileBytes, err := ioutil.ReadFile("client/public/images/user-icon-post.png")
+	if err != nil {
+		log.Println("Error reading file:", err)
+	}
+
 	user.Username = username
 	user.Email = email
 	user.Password = password
 	user.Name = name
 	user.Bio = bio
+	user.Icon = fileBytes
 
 	db := CON.DB()
 
-	query := "INSERT INTO user (username, name, bio, email, password) VALUES (?, ?, ?, ?, ?)"
+	query := "INSERT INTO user (username, name, bio, email, password, icon) VALUES (?, ?, ?, ?, ?, ?)"
 	stmt, err := db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	_, err = stmt.Exec(user.Username, user.Name, user.Bio, user.Email, validators.Hash(user.Password))
+	_, err = stmt.Exec(user.Username, user.Name, user.Bio, user.Email, validators.Hash(user.Password), user.Icon)
 	if err != nil {
 		log.Println("Error executing SQL statement:", err)
 		c.JSON(500, gin.H{"error": "Failed to create user"})
 		return
 	}
-	session := utils.GetSession(c)
-	session.Values["id"] = strconv.Itoa(user.ID)
-	session.Values["email"] = user.Email
-	session.Save(c.Request, c.Writer)
+	
 	c.JSON(200, gin.H{"message": "User created successfully"})
 }

@@ -14,6 +14,7 @@ func InitRoutes(r *gin.RouterGroup) {
 	r.GET("/profile")
 	r.POST("/signup", handlers.Signup)
 	r.POST("/validate-email", handlers.ExistEmail)
+	r.POST("/validate-username", handlers.ExistUsername)
 	r.POST("/login", handlers.UserLogin)
 	r.POST("/create-post", handlers.CreateNewPost)
 	r.POST("/follow", handlers.Follow)
@@ -23,4 +24,9 @@ func InitRoutes(r *gin.RouterGroup) {
 	r.GET("/:username", handlers.RenderProfileTemplate)
 	r.POST("/profile", handlers.Profile)
 	r.POST("/profile/:username", handlers.AnotherUserProfile)
+	r.GET("/edit-profile", views.EditProfileView)
+	r.POST("/edit-profile", handlers.EditProfile)
 }
+
+
+

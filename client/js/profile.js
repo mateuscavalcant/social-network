@@ -1,9 +1,11 @@
+
 function loadPostsProfile() {
   fetch("/profile", {
     method: "POST"
   })
     .then(response => response.json())
     .then(data => {
+      console.log(data);
       var userHeaderDetailsHTML = `<div class="name">
         <header>
           <div class="user-name">
@@ -19,9 +21,13 @@ function loadPostsProfile() {
 
       var $userHeaderDetails = $(userHeaderDetailsHTML);
       $("#profile-header-container").append($userHeaderDetails);
+
+      var imageData = data.icon;
+      var imageUrl = 'data:image/jpeg;base64,' + imageData;
+      $("#profile-icon").attr("src", imageUrl);
       var userDetailsHTML = `<div class="user">
         <header>
-          <img src="client/public/images/gopher.jpeg" class="user-icon">
+        <img id="profile-icon" src="${imageUrl}" class="user-icon">
           <div class="user-title">
             <p>@${data.profile.username}</p>
           </div>
@@ -46,13 +52,17 @@ function loadPostsProfile() {
         </div>
       </div>`;
       var $userDetails = $(userDetailsHTML);
+      $userDetails.find("#edit-profile-btn").click(function () {
+        window.location.href = "/edit-profile";
+      });
+
       $("#user-profile-container").append($userDetails);
       $("#posts-container").empty();
 
       data.posts.forEach(function (post) {
         var postHTML = `<div class="post">
           <header>
-            <img src="client/public/images/gopher.jpeg" class="profile-icon">
+            <img id="profile-icon" src="${imageUrl}" class="profile-icon">
             <div class="post-title">
               <div class="user-name-post">
                 <p class="name-user${post.postID}">${post.createdbyname}</p>
@@ -76,11 +86,7 @@ function loadPostsProfile() {
           </footer>
         </div>`;
         var $post = $(postHTML);
-        $post.find(".like-button").on("click", function () {
-          var postID = $(this).data("post-id");
-          // Alterar a imagem para a nova imagem de curtida
-          $(this).attr("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAAAXNSR0IArs4c6QAAAnBJREFUWEft1t+rDGEYB/Dvd3Zn2yNhZ6ToJEWhzp2kKMyk5IILbtwoodw4F4oSLpQokRJulKSUC8UFyc3Z2Vw5f8CpLTdbpyS1s3I4aubsPNpTK2fNj3f2naOjzl7O+7zP83mf931nh1hiPy4xD5ZBWTui1CEB2KnsHRMp7zKAEQqb3bmwaeP9dFwBH3s2GuXqVqFsi4CfZPShFjSmCIgWaAa714Vm9Z4AR0isGEwmIpNGKMdraLR6Y1/hbu6aeE5iZ0zsDME35ZDjqzDRToIldsgvuYdh4AkIO21VIvIdxGlDUI2AhyRXpsfjCyOcsbr113FxsaBO2b0qBq5ntVdrPIouWXONW4M5/gL5JfcQSnirVUxxshHJgTVz3sSf4QtAgh2mX1ndIrBBMadmmLRqwdotxItuP9ECUMd0Tgn5WLNKzunRCStoPIsFtSvOO4IHc2bUChfglR3UjyaBpgmOalXIOVkgTTvwtseDTGeW5EjOnFrhAvlsB976pA59Ivh7UKuS6mSRKSv0xmJBvuk0QO5TzVVEnEBe2oF3LP6W/YsX4sAqROSsHXqP4rcM+0dh8iPJahGrz8wh0pFwdpONyW+xoN5Dv+xchsEbmckKCKBEJ2th42nim7o/0DaduyTPF1AzJYXctALvymBA8r+96d4HcW5RUIIHVlgfj8ud+oHmLwYqBdMDZn4xForKwCiB5g96EZ1SwCiDtFGKmFwgDdQdK6hfVL0cmWdoMJFfcW8DuKBYIBcmd4f6CEVUbszQoPntS+/UUBgtUApqaIw2KAalhSkE1EcJ8MMO6tcUD3tiWO5bplswa/4y6L/r0C89QuAlNQSzNwAAAABJRU5ErkJggg==");
-        });
+
         $("#posts-container").prepend($post);
       });
     })
@@ -97,4 +103,5 @@ function handleHome(event) {
 $(document).ready(function () {
   loadPostsProfile();
   $("#home-btn").click(handleHome);
+
 });

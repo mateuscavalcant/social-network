@@ -1,6 +1,7 @@
 body {
   margin: 0;
   overflow: auto;
+  image-rendering: optimizeSpeed;
 }
 
 .name {

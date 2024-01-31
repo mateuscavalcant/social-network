@@ -40,3 +40,33 @@ func ExistEmail(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{"message": "Email Validad"})
 }
+
+
+func ExistUsername(c *gin.Context) {
+	resp := errs.ErrorResponse{
+		Error: make(map[string]string),
+	}
+
+	username := strings.TrimSpace(c.PostForm("username"))
+	ExistUsername, err := validators.ExistUsername(username)
+	if err != nil {
+		log.Println("Error checking email existence:", err)
+		c.JSON(500, gin.H{"error": "Failed to validate email"})
+		return
+	}
+	
+	if !validators.ValidateFormatUsername(username) {
+		resp.Error["username"] = "Invalid username format!"
+	}
+
+	if ExistUsername {
+		resp.Error["username"] = "Email already exists!"
+	}
+
+	if len(resp.Error) > 0 {
+		c.JSON(400, resp)
+		return
+	}
+	c.JSON(200, gin.H{"message": "username Validad"})
+}
+

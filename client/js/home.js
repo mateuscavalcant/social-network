@@ -7,15 +7,17 @@ function loadPosts() {
       $("#posts-container").empty();
 
       data.posts.forEach(post => {
+        var imageData = post.iconbase64;
+        var imageUrl = 'data:image/jpeg;base64,' + imageData;
         var postHTML = `<div class="post">
               <header>
-                  <img src="client/public/images/user-icon-post.png" class="profile-icon">
+                  <img id="profile-icon" src="${imageUrl}" class="profile-icon">
                   <div class="post-title">
                       <div class="user-name">
-                          <p class="name-user${post.postID}">${post.createdbyname}</p>
+                          <p class="name-user${post.postid}">${post.createdbyname}</p>
                       </div>
                       <div class="user-username">
-                          <p class="username-user${post.postID}">@${post.createdby}</p>
+                          <p class="username-user${post.postid}">@${post.createdby}</p>
                       </div>
                   </div>
               </header>

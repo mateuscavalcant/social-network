@@ -7,7 +7,6 @@ import (
 )
 
 func Logout(c *gin.Context) {
-	utils.LoggedIn(c, "")
 	session := utils.GetSession(c)
 	delete(session.Values, "id")
 	delete(session.Values, "email")

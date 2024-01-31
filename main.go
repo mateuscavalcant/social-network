@@ -5,6 +5,7 @@ import (
 	"os"
 	"social-network-go/pkg/routes"
 
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -16,7 +17,7 @@ func main() {
 	}
 
 	r := gin.Default()
-
+	r.Use(gzip.Gzip(gzip.DefaultCompression))
 	r.LoadHTMLGlob("client/templates/*")
 	r.Static("/client", "./client")
 
@@ -26,7 +27,5 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-
 	r.Run(":" + port)
-	
 }

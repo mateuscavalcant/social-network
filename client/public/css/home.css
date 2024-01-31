@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: auto;
+  image-rendering: optimizeSpeed;
 }
 
 .home-header {
@@ -194,6 +195,18 @@ body {
   margin-right: 0;
   margin-left: 0;
   vertical-align: bottom;
+}
+
+#home-btn {
+  background-color: #ffffff;
+  position: fixed;
+  color: white;
+  border: none;
+  padding: 7px 7px;
+  border-radius: 50%;
+  cursor: pointer;
+  bottom: 2px;
+  left: 15px;
 }
 
 #search-btn {

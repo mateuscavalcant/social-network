@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="client/public/css/style.css">
+
+</head>
+
+<body>
+    <section class="container forms">
+        <div class="form web-link">
+            <div class="form-content">
+                <form id="edit-profile-form" method="post" action="/edit-profile">
+
+                    <header>
+                        <input type="file" name="icon" id="icon" accept="image/*">
+                        <span id="error-icon" class="error-message"></span>
+                    </header>
+                    <div class="field input-field">
+                        <input type="text" name="name" id="name" placeholder="Name" class="input">
+                        <span id="error-name" class="error-message"></span>
+                    </div>
+                    <div class="field input-field">
+                        <input type="text" id="username" name="username" placeholder="Username" class="input">
+                        <span id="error-username" class="error-message"></span>
+                    </div>
+                    <div class="field input-field">
+                        <input type="text" id="bio" name="bio" placeholder="Bio" class="input">
+                        <span id="error-bio" class="error-message"></span>
+                    </div>
+
+
+                    <div class="field button-field">
+                        <button type="submit">Save Updates</button>
+                    </div>
+                </form>
+            </div>
+    </section>
+    <script src="client/js/edit_profile.js"></script>
+</body>
+
+</html>
