@@ -6,7 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ProfileView(c *gin.Context) {
-	tmpl := template.Must(template.ParseFiles("client/templates/profile.html"))
-	tmpl.Execute(c.Writer, nil)
+
+func RenderProfile(c *gin.Context, tmpl string, data interface{}) {
+	t := template.Must(template.ParseFiles("client/templates/" + tmpl))
+	t.Execute(c.Writer, data)
 }

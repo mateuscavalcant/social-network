@@ -28,7 +28,7 @@ type UserPost struct {
 	UserID     int    `json:"user-id"`
 	Content    string `json:"content"`
 	Icon       []byte `json:"icon"`
-	IconBase64  string `json:"iconbase64"`
+	IconBase64 string `json:"iconbase64"`
 	CreatedBy  string `json:"createdby"`
 	Name       string `json:"createdbyname"`
 }
@@ -39,6 +39,7 @@ type UserProfile struct {
 	Username      string `json:"username"`
 	Email         string `json:"email"`
 	Icon          []byte `json:"icon"`
+	IconBase64    string `json:"iconbase64"`
 	Bio           string `json:"bio"`
 	Posts         int    `json:"countposts"`
 	FollowBy      bool   `json:"followby"`

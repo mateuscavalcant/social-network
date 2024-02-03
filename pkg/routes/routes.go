@@ -2,6 +2,7 @@ package routes
 
 import (
 	"social-network-go/pkg/handlers"
+	"social-network-go/pkg/middleware"
 	"social-network-go/pkg/views"
 
 	"github.com/gin-gonic/gin"
@@ -10,12 +11,14 @@ import (
 func InitRoutes(r *gin.RouterGroup) {
 	r.GET("/signup", views.SignupView)
 	r.GET("/login", views.LoginView)
-	r.GET("/home", views.HomeView)
-	r.GET("/profile")
 	r.POST("/signup", handlers.Signup)
 	r.POST("/validate-email", handlers.ExistEmail)
 	r.POST("/validate-username", handlers.ExistUsername)
 	r.POST("/login", handlers.UserLogin)
+
+	r.Use(middleware.AuthMiddleware())
+
+	r.GET("/home", views.HomeView)
 	r.POST("/create-post", handlers.CreateNewPost)
 	r.POST("/follow", handlers.Follow)
 	r.POST("/unfollow", handlers.Unfollow)

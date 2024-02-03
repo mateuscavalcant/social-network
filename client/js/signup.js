@@ -46,7 +46,6 @@ document.getElementById("signup-form").addEventListener("submit", function (even
         method: "POST",
         body: formData
     })
-        // Exibe as mensagens de erro correspondentes nos campos do formulário
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -57,7 +56,13 @@ document.getElementById("signup-form").addEventListener("submit", function (even
                 document.getElementById("error-confirm-password").textContent = data.error.confirm_password;
 
             } else {
-                console.log(data.message);
+                document.getElementById("signup-btn").textContent = data.message;
+                document.getElementById("signup-btn").style.color = "#00ff33";
+                document.getElementById("username").value = "";
+                document.getElementById("name").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("password").value = "";
+                document.getElementById("confirm_password").value = "";
                 window.location.replace("/login");
 
             }

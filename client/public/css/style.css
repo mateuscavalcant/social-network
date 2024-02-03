@@ -46,7 +46,7 @@
 header {
     font-size: 28px;
     font-weight: 600;
-    color: #9DD9F3;
+    color: #000000;
     text-align: center;
 }
 
@@ -104,14 +104,14 @@ form {
 
 .field button {
     color: #fff;
-    background-color: #77C3EC;
+    background-color: #000000;
     transition: all 0.3s ease;
     cursor: pointer;
     border-radius: 25px;
 }
 
 .field button:hover {
-    background-color: #9DD9F3;
+    background-color: #464646;
 }
 
 .form-link {
@@ -123,14 +123,23 @@ form {
 .form-link a {
     font-size: 14px;
     font-weight: 400;
-    color: #8b8b8b;
+    color: #6c6c6c;
 }
 
 .form a {
-    color: #77C3EC;
+    color: #000000;
     text-decoration: none;
 }
 
 .form-content a:hover {
     text-decoration: underline;
+}
+
+#profile-image {
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
 }

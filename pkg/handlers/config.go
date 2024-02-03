@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"log"
-	"net/http"
 	CON "social-network-go/pkg/database"
 	"social-network-go/pkg/models"
 	"social-network-go/pkg/models/errs"
@@ -18,11 +17,8 @@ import (
 func DeleteAccount(c *gin.Context) {
     var user models.User
 
-    idInterface, exists := utils.AllSessions(c)
-	if exists == false || idInterface == nil {
-        c.Redirect(http.StatusUnauthorized, "/login")
-        return
-    }
+    idInterface, _ := utils.AllSessions(c)
+
     id, _ := strconv.Atoi(idInterface.(string))
     user.ID = id
 

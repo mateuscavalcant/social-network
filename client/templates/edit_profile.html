@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
     <link rel="stylesheet" href="client/public/css/style.css">
-
 </head>
 
 <body>
@@ -15,30 +14,31 @@
         <div class="form web-link">
             <div class="form-content">
                 <form id="edit-profile-form" method="post" action="/edit-profile">
-
                     <header>
+                        <!-- Atribua um ID à imagem para aplicar estilos CSS -->
+                        <img id="profile-image" src="data:image/jpeg;base64, {{ .IconBase64 }}" alt="Profile Icon">
+                        <!-- Input para o arquivo de ícone, se o usuário quiser alterá-lo -->
                         <input type="file" name="icon" id="icon" accept="image/*">
                         <span id="error-icon" class="error-message"></span>
                     </header>
+
+                    </header>
                     <div class="field input-field">
-                        <input type="text" name="name" id="name" placeholder="Name" class="input">
+                        <!-- Mostrar o nome do usuário -->
+                        <input type="text" name="name" id="name" placeholder="Name" class="input" value="{{ .Name }}">
                         <span id="error-name" class="error-message"></span>
                     </div>
                     <div class="field input-field">
-                        <input type="text" id="username" name="username" placeholder="Username" class="input">
-                        <span id="error-username" class="error-message"></span>
-                    </div>
-                    <div class="field input-field">
-                        <input type="text" id="bio" name="bio" placeholder="Bio" class="input">
+                        <!-- Mostrar a biografia do usuário -->
+                        <input type="text" id="bio" name="bio" placeholder="Bio" class="input" value="{{ .Bio }}">
                         <span id="error-bio" class="error-message"></span>
                     </div>
-
-
                     <div class="field button-field">
                         <button type="submit">Save Updates</button>
                     </div>
                 </form>
             </div>
+        </div>
     </section>
     <script src="client/js/edit_profile.js"></script>
 </body>

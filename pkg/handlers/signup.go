@@ -69,7 +69,7 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	fileBytes, err := ioutil.ReadFile("client/public/images/user-icon-post.png")
+	fileBytes, err := ioutil.ReadFile("client/public/images/user-icon.jpg")
 	if err != nil {
 		log.Println("Error reading file:", err)
 	}
@@ -96,5 +96,5 @@ func Signup(c *gin.Context) {
 		return
 	}
 	
-	c.JSON(200, gin.H{"message": "User created successfully"})
+	c.JSON(200, gin.H{"message": "Successful signup"})
 }

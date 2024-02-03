@@ -41,16 +41,17 @@ func Feed(c *gin.Context) {
 	posts := []models.UserPost{}
 
 	query := `
-		SELECT user_post.post_id, user_post.id AS post_user_id, user_post.content,
-		       user.id AS user_id, user.username, user.name, user.icon
-		FROM user_post
-		JOIN user ON user.id = user_post.id
-		WHERE user.id = ? OR user.id IN (
-		    SELECT user_follow.followTo
-		    FROM user_follow
-		    WHERE user_follow.followBy = ?
-		)
-	`
+    SELECT user_post.post_id, user_post.id AS post_user_id, user_post.content,
+           user.id AS user_id, user.username, user.name, user.icon
+    FROM user_post
+    JOIN user ON user.id = user_post.id
+    WHERE user.id = ? OR user.id IN (
+        SELECT user_follow.followTo
+        FROM user_follow
+        WHERE user_follow.followBy = ?
+    )
+    ORDER BY user_post.created_at ASC
+`
 
 	rows, err := db.Query(query, id, id)
 	if err != nil {
@@ -136,7 +137,8 @@ func CreateNewPost(c *gin.Context) {
 
     userPost.CreatedBy = username
 
-    stmt, err := db.Prepare("INSERT INTO user_post(content, createdBy, id) VALUES (?, ?, ?)")
+    stmt, err := db.Prepare("INSERT INTO user_post(content, createdBy, id, created_at) VALUES (?, ?, ?, NOW())")
+
     if err != nil {
         log.Println("Error preparing SQL statement:", err)
         c.JSON(http.StatusInternalServerError, gin.H{

@@ -1,3 +1,17 @@
+document.addEventListener("DOMContentLoaded", function () {
+  // Após a conclusão da busca pelos dados do perfil
+  fetch("/profile", {
+    method: "POST"
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Atribuir o nome e o nome de usuário ao título
+      document.title = `${data.profile.name} / (@${data.profile.username})`;
+    })
+    .catch(error => {
+      console.error('Error fetching profile data:', error);
+    });
+});
 
 function loadPostsProfile() {
   fetch("/profile", {
@@ -47,7 +61,7 @@ function loadPostsProfile() {
             </div>
           </main>
           <footer>
-            <button id="edit-profile-btn">Edit Profile</button>
+          <button id="edit-profile-btn">Edit Profile</button>
           </footer>
         </div>
       </div>`;

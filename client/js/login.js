@@ -19,6 +19,8 @@ document.getElementById("login-form").addEventListener("submit", function (event
                 document.getElementById("error-password").textContent = data.error.password;
             } else {
                 console.log(data.message);
+                document.getElementById("identifier").value = "";
+                document.getElementById("password").value = "";
                 window.location.replace("/home");
             }
         })

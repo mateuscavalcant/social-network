@@ -8,6 +8,7 @@ import (
 	"net/http"
 	CON "social-network-go/pkg/database"
 	"social-network-go/pkg/models"
+	"social-network-go/pkg/views"
 	"social-network-go/pkg/models/errs"
 	"social-network-go/pkg/utils"
 	"strconv"
@@ -23,7 +24,6 @@ import (
 
 func AnotherUserProfile(c *gin.Context) {
 	username := c.Param("username")
-	// Obtenha o ID do usuário alvo usando o nome de usuário
 	db := CON.DB()
 	var targetUserID int
 	post.UserID = targetUserID
@@ -151,11 +151,7 @@ func AnotherUserProfile(c *gin.Context) {
 
 
 func Profile(c *gin.Context) {
-	idInterface, exists := utils.AllSessions(c)
-	if exists == false || idInterface == nil {
-        c.Redirect(http.StatusUnauthorized, "/login")
-        return
-    }
+	idInterface, _ := utils.AllSessions(c)
 	id, _ := strconv.Atoi(idInterface.(string))
 	db := CON.DB()
 
@@ -252,11 +248,8 @@ func Profile(c *gin.Context) {
 }
 
 func RenderProfileTemplate(c *gin.Context) {
-	idInterface, exists := utils.AllSessions(c)
-	if exists == false || idInterface == nil {
-        c.Redirect(http.StatusUnauthorized, "/login")
-        return
-    }
+	idInterface, _ := utils.AllSessions(c)
+
 	id, _ := strconv.Atoi(idInterface.(string))
 
 	username := c.Param("username")
@@ -291,13 +284,13 @@ func RenderProfileTemplate(c *gin.Context) {
 	}
 
 	if userSession.Username != username {
-		c.HTML(http.StatusOK, "other_profile.html", gin.H{
+		views.RenderProfile(c, "other_profile.html", gin.H{
 			"username": username,
 		})
 		return
 	}
 
-	c.HTML(http.StatusOK, "profile.html", gin.H{
+	views.RenderProfile(c, "profile.html", gin.H{
 		"username": username,
 	})
 }
@@ -305,72 +298,77 @@ func RenderProfileTemplate(c *gin.Context) {
 func EditProfile(c *gin.Context) {
 	idInterface, exists := utils.AllSessions(c)
 	if exists == false || idInterface == nil {
-        c.Redirect(http.StatusUnauthorized, "/login")
-        return
-    }
-	
+		c.Redirect(http.StatusUnauthorized, "/login")
+		return
+	}
+
 	id, _ := strconv.Atoi(idInterface.(string))
 
+	var fileBytes []byte
 	file, _, err := c.Request.FormFile("icon")
-    if err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Erro ao obter a imagem do formulário"})
-        return
-    }
-    defer file.Close()
+	if err != nil && err != http.ErrMissingFile {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Erro ao obter a imagem do formulário"})
+		return
+	} else if err == nil {
+		defer file.Close()
 
-    // Lê o conteúdo do arquivo
-    fileBytes, err := ioutil.ReadAll(file)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao ler a imagem"})
-        return
-    }
+		fileBytes, err = ioutil.ReadAll(file)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao ler a imagem"})
+			return
+		}
+	}
 
-    // Obtém outros dados do formulário
-    username := strings.TrimSpace(c.PostForm("username"))
-    name := strings.TrimSpace(c.PostForm("name"))
-    bio := strings.TrimSpace(c.PostForm("bio"))
+	name := strings.TrimSpace(c.PostForm("name"))
+	bio := strings.TrimSpace(c.PostForm("bio"))
 
-    // Validação dos dados do formulário
-    resp := errs.ErrorResponse{
-        Error: make(map[string]string),
-    }
+	resp := errs.ErrorResponse{
+		Error: make(map[string]string),
+	}
 
-    if len(username) < 4 || len(username) > 32 {
-        resp.Error["username"] = "Username should be between 4 and 32"
-    }
-    if len(name) < 1 || len(name) > 70 {
-        resp.Error["name"] = "Name should be between 1 and 70"
-    }
-    if len(bio) > 150 {
-        resp.Error["bio"] = "Bio should be between 1 and 150"
-    }
+	if len(name) < 1 || len(name) > 70 {
+		resp.Error["name"] = "Name should be between 1 and 70"
+	}
+	if len(bio) > 150 {
+		resp.Error["bio"] = "Bio should be between 1 and 150"
+	}
 
-    if len(resp.Error) > 0 {
-        c.JSON(http.StatusBadRequest, resp)
-        return
-    }
+	if len(resp.Error) > 0 {
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
 
-    user.Username = username
-    user.Name = name
-    user.Bio = bio
-	user.Icon = fileBytes
+	db := CON.DB()
 
-    db := CON.DB()
-
-	stmt, err := db.Prepare("UPDATE user SET username=?, name=?, bio=?, icon=? WHERE id=?")
+	stmt, err := db.Prepare("UPDATE user SET name=?, bio=? WHERE id=?")
 	if err != nil {
 		log.Println("Error preparing SQL statement:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
 		return
 	}
 	defer stmt.Close()
+
+	if fileBytes != nil {
+		stmt, err = db.Prepare("UPDATE user SET name=?, bio=?, icon=? WHERE id=?")
+		if err != nil {
+			log.Println("Error preparing SQL statement:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+			return
+		}
+		defer stmt.Close()
 	
-	_, err = stmt.Exec(user.Username, user.Name, user.Bio, user.Icon, id)
-	if err != nil {
-		log.Println("Error executing prepared SQL statement:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
-		return
+		_, err = stmt.Exec(name, bio, fileBytes, id)
+	} else {
+		stmt, err = db.Prepare("UPDATE user SET name=?, bio=? WHERE id=?")
+		if err != nil {
+			log.Println("Error preparing SQL statement:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+			return
+		}
+		defer stmt.Close()
+	
+		_, err = stmt.Exec(name, bio, id)
 	}
-	
+
 	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
