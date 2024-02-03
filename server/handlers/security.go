@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"log"
-	"social-network-go/pkg/models/errs"
-	"social-network-go/pkg/validators"
+	"social-network-go/server/models/errs"
+	"social-network-go/server/validators"
 	"strings"
 
 	"github.com/gin-gonic/gin"

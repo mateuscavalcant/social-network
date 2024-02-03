@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"social-network-go/pkg/utils"
+	"social-network-go/server/utils"
 
 	"github.com/gin-gonic/gin"
 )

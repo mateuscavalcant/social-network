@@ -5,9 +5,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	CON "social-network-go/pkg/database"
-	"social-network-go/pkg/models"
-	"social-network-go/pkg/utils"
+	CON "social-network-go/server/database"
+	"social-network-go/server/models"
+	"social-network-go/server/utils"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

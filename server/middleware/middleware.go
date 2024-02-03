@@ -1,10 +1,10 @@
 package middleware
 
 import (
-    "net/http"
-    "social-network-go/pkg/utils"
+	"net/http"
+	"social-network-go/server/utils"
 
-    "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
 func AuthMiddleware() gin.HandlerFunc {

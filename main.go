@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"os"
-	"social-network-go/pkg/routes"
+	"social-network-go/server/routes"
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"

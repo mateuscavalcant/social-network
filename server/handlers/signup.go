@@ -3,10 +3,10 @@ package handlers
 import (
 	"io/ioutil"
 	"log"
-	CON "social-network-go/pkg/database"
-	"social-network-go/pkg/models"
-	"social-network-go/pkg/models/errs"
-	"social-network-go/pkg/validators"
+	CON "social-network-go/server/database"
+	"social-network-go/server/models"
+	"social-network-go/server/models/errs"
+	"social-network-go/server/validators"
 	"strings"
 
 	"github.com/gin-gonic/gin"

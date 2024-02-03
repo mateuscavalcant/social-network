@@ -5,8 +5,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	CON "social-network-go/pkg/database"
-	"social-network-go/pkg/models"
+	CON "social-network-go/server/database"
+	"social-network-go/server/models"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"social-network-go/pkg/handlers"
-	"social-network-go/pkg/middleware"
-	"social-network-go/pkg/views"
+	"social-network-go/server/handlers"
+	"social-network-go/server/middleware"
+	"social-network-go/server/views"
 
 	"github.com/gin-gonic/gin"
 )

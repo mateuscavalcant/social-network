@@ -3,8 +3,8 @@ package handlers
 import (
 	"log"
 	"net/http"
-	CON "social-network-go/pkg/database"
-	"social-network-go/pkg/utils"
+	CON "social-network-go/server/database"
+	"social-network-go/server/utils"
 
 	"github.com/gin-gonic/gin"
 )

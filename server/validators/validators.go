@@ -3,7 +3,7 @@ package validators
 import (
 	"encoding/base64"
 	"regexp"
-	CON "social-network-go/pkg/database"
+	CON "social-network-go/server/database"
 
 	"github.com/badoux/checkmail"
 	"golang.org/x/crypto/bcrypt"
