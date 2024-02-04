@@ -1,7 +1,7 @@
 # Social Network Project
 
 ## Description
-<img align="right" width="200px" src="client/public/images/gopherjs.png">
+<img align="right" width="150px" src="client/public/images/gopherjs.png">
 
 I began this project while studying relationships between tables in structured databases. I built a database in MySQL Workbench with the initial intention of it being a simple table structure for a social network. However, I decided to expand the project by adding a server.
 
@@ -19,6 +19,18 @@ My next step was to integrate a client into the application, which may have been
 - Editing profile
 - Following other users
 - Feed displaying posts based on followed users
+
+## Screenshots
+
+<img align="center" width="900px" src="client/public/images/login_page.png">
+
+<img width="900px" src="client/public/images/home_page.png">
+
+<img width="900px" src="client/public/images/profile_page.png">
+
+<img width="900px" src="client/public/images/other_profile_page.png">
+
+
 
 
 
