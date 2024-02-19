@@ -12,20 +12,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Signup handles user signup requests.
 func Signup(c *gin.Context) {
 	var user models.User
 
+	// Default bio value for new users
 	bio := "Your bio"
+
+	// Extract form inputs from the request
 	username := strings.TrimSpace(c.PostForm("username"))
 	name := strings.TrimSpace(c.PostForm("name"))
 	email := strings.TrimSpace(c.PostForm("email"))
 	password := strings.TrimSpace(c.PostForm("password"))
 	confirmPassword := strings.TrimSpace(c.PostForm("confirm_password"))
 
+	// Prepare error response object
 	resp := errs.ErrorResponse{
 		Error: make(map[string]string),
 	}
 
+	// Check if email already exists
 	existEmail, err := validators.ExistEmail(email)
 	if err != nil {
 		log.Println("Error checking email existence:", err)
@@ -33,10 +39,10 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	if username == "" || name == "" || email == "" || password == "" || confirmPassword == ""  {
+	// Validate form inputs
+	if username == "" || name == "" || email == "" || password == "" || confirmPassword == "" {
 		resp.Error["missing"] = "Some values are missing!"
 	}
-
 	if len(username) < 4 || len(username) > 32 {
 		resp.Error["username"] = "Username should be between 4 and 32"
 	}
@@ -69,11 +75,13 @@ func Signup(c *gin.Context) {
 		return
 	}
 
+	// Read default user icon file
 	fileBytes, err := ioutil.ReadFile("client/public/images/user-icon.jpg")
 	if err != nil {
 		log.Println("Error reading file:", err)
 	}
 
+	// Populate user object with form inputs and default icon
 	user.Username = username
 	user.Email = email
 	user.Password = password
@@ -81,20 +89,24 @@ func Signup(c *gin.Context) {
 	user.Bio = bio
 	user.Icon = fileBytes
 
+	// Connect to the database
 	db := CON.DB()
 
+	// Prepare SQL statement for user insertion
 	query := "INSERT INTO user (username, name, bio, email, password, icon) VALUES (?, ?, ?, ?, ?, ?)"
 	stmt, err := db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Execute the SQL statement to create the new user
 	_, err = stmt.Exec(user.Username, user.Name, user.Bio, user.Email, validators.Hash(user.Password), user.Icon)
 	if err != nil {
 		log.Println("Error executing SQL statement:", err)
 		c.JSON(500, gin.H{"error": "Failed to create user"})
 		return
 	}
-	
+
+	// Return success message
 	c.JSON(200, gin.H{"message": "Successful signup"})
 }

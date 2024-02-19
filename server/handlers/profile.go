@@ -22,12 +22,16 @@ import (
 	var post models.UserPost
 
 
+
+// AnotherUserProfile handles requests to view another user's profile.
 func AnotherUserProfile(c *gin.Context) {
+	// Extract username from request parameters
 	username := c.Param("username")
 	db := CON.DB()
 	var targetUserID int
 	post.UserID = targetUserID
 
+	// Query the database to get the ID of the target user
 	queryUserID := "SELECT id FROM user WHERE username = ?"
 	err := db.QueryRow(queryUserID, username).Scan(&targetUserID)
 	if err != nil {
@@ -44,6 +48,7 @@ func AnotherUserProfile(c *gin.Context) {
 		return
 	}
 
+	// Query user profile information including follower and following counts
 	queryUser := `
 	SELECT
 		user.username, user.name, user.bio,
@@ -62,8 +67,7 @@ func AnotherUserProfile(c *gin.Context) {
 	) AS followed_counts ON followed_counts.followBy = user.id
 	WHERE user.id = ?
 `
-
-	err1 := db.QueryRow(queryUser, targetUserID).Scan(&user.Username, &user.Name, &user.Bio, &user.FollowByCount, &user.FollowToCount)
+	err = db.QueryRow(queryUser, targetUserID).Scan(&user.Username, &user.Name, &user.Bio, &user.FollowByCount, &user.FollowToCount)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.JSON(http.StatusNotFound, gin.H{
@@ -71,15 +75,15 @@ func AnotherUserProfile(c *gin.Context) {
 			})
 			return
 		}
-		log.Println("Failed to query user information:", err1)
+		log.Println("Failed to query user information:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to fetch user information",
 		})
 		return
 	}
 
+	// Query user's posts
 	posts := []models.UserPost{}
-
 	query := "SELECT user_post.post_id, user_post.id AS user_post_id, user_post.content, user.id AS user_id, user.username, user.name FROM user_post JOIN user ON user.id = user_post.id WHERE user.id = ?"
 	rows, err := db.Query(query, targetUserID)
 	if err != nil {
@@ -92,7 +96,6 @@ func AnotherUserProfile(c *gin.Context) {
 	defer rows.Close()
 
 	for rows.Next() {
-
 		err := rows.Scan(&post.PostID, &post.PostUserID, &post.Content, &post.UserID, &post.CreatedBy, &post.Name)
 		if err != nil {
 			log.Println("Failed to scan statement", err)
@@ -101,7 +104,6 @@ func AnotherUserProfile(c *gin.Context) {
 			})
 			return
 		}
-
 		posts = append(posts, post)
 	}
 
@@ -115,21 +117,25 @@ func AnotherUserProfile(c *gin.Context) {
 	countPosts := len(posts)
 	user.Posts = countPosts
 
+	// Query user's icon
 	queryIcon := `SELECT icon FROM user WHERE id = ?`
-	errIcon := db.QueryRow(queryIcon, targetUserID).Scan(&user.Icon)
-	if errIcon != nil {
+	err = db.QueryRow(queryIcon, targetUserID).Scan(&user.Icon)
+	if err != nil {
 		log.Println("Failed to scan statement", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to scan rows",
 		})
 		return
 	}
-	
+
+	// Encode user's icon to base64
 	imageBase64 := base64.StdEncoding.EncodeToString(user.Icon)
 
+	// Retrieve current user ID from session
 	idInterface, _ := utils.AllSessions(c)
 	id, _ := strconv.Atoi(idInterface.(string))
-	// Consulta para verificar se o usuário atual está seguindo o usuário-alvo
+
+	// Check if the current user is following the target user
 	queryFollow := "SELECT COUNT(*) FROM user_follow WHERE followBy = ? AND followTo = ?"
 	var followCount int
 	errFollow := db.QueryRow(queryFollow, id, targetUserID).Scan(&followCount)
@@ -137,26 +143,27 @@ func AnotherUserProfile(c *gin.Context) {
 		log.Println("Failed to check follow status:", errFollow)
 	}
 
-	// Se followCount for maior que 0, o usuário atual está seguindo o usuário-alvo
+	// Set FollowBy field based on follow status
 	user.FollowBy = followCount > 0
 
-	// Retorne o perfil público do usuário alvo com seus posts públicos
+	// Return the target user's public profile with their public posts
 	c.JSON(http.StatusOK, gin.H{
 		"profile": user,
 		"posts":   posts,
-		"icon":    imageBase64, // Envie a imagem codificada em base64 para o cliente
+		"icon":    imageBase64, // Send the base64 encoded image to the client
 	})
 }
-	
 
-
+// Profile handles requests to view the user's own profile.
 func Profile(c *gin.Context) {
+	// Retrieve user ID from session
 	idInterface, _ := utils.AllSessions(c)
 	id, _ := strconv.Atoi(idInterface.(string))
 	db := CON.DB()
 
 	post.UserID = id
 
+	// Query user's profile information
 	queryUser := `
 	SELECT
 		user.username, user.name, user.bio,
@@ -175,7 +182,6 @@ func Profile(c *gin.Context) {
 	) AS followed_counts ON followed_counts.followBy = user.id
 	WHERE user.id = ?
 `
-
 	err := db.QueryRow(queryUser, id).Scan(&user.Username, &user.Name, &user.Bio, &user.FollowByCount, &user.FollowToCount)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -191,8 +197,8 @@ func Profile(c *gin.Context) {
 		return
 	}
 
+	// Query user's posts
 	posts := []models.UserPost{}
-
 	query := "SELECT user_post.post_id, user_post.id AS user_post_id, user_post.content, user.id AS user_id, user.username, user.name FROM user_post JOIN user ON user.id = user_post.id WHERE user.id = ?"
 	rows, err := db.Query(query, id)
 	if err != nil {
@@ -205,7 +211,6 @@ func Profile(c *gin.Context) {
 	defer rows.Close()
 
 	for rows.Next() {
-
 		err := rows.Scan(&post.PostID, &post.PostUserID, &post.Content, &post.UserID, &post.CreatedBy, &post.Name)
 		if err != nil {
 			log.Println("Failed to scan statement", err)
@@ -214,7 +219,6 @@ func Profile(c *gin.Context) {
 			})
 			return
 		}
-
 		posts = append(posts, post)
 	}
 
@@ -228,34 +232,40 @@ func Profile(c *gin.Context) {
 	countPosts := len(posts)
 	user.Posts = countPosts
 
+	// Query user's icon
 	queryIcon := `SELECT icon FROM user WHERE id = ?`
-	errIcon := db.QueryRow(queryIcon, id).Scan(&user.Icon)
-	if errIcon != nil {
+	err = db.QueryRow(queryIcon, id).Scan(&user.Icon)
+	if err != nil {
 		log.Println("Failed to scan statement", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to scan rows",
 		})
 		return
 	}
-	
+
+	// Encode user's icon to base64
 	imageBase64 := base64.StdEncoding.EncodeToString(user.Icon)
-	
+
+	// Return user's profile with their posts
 	c.JSON(http.StatusOK, gin.H{
 		"profile": user,
 		"posts":   posts,
-		"icon":    imageBase64, 
+		"icon":    imageBase64,
 	})
 }
 
+// RenderProfileTemplate renders the user's profile template based on the request.
 func RenderProfileTemplate(c *gin.Context) {
+	// Retrieve user ID from session
 	idInterface, _ := utils.AllSessions(c)
-
 	id, _ := strconv.Atoi(idInterface.(string))
 
+	// Retrieve username from request parameters
 	username := c.Param("username")
 
 	db := CON.DB()
 
+	// Check if the user with the given username exists
 	queryExist := "SELECT COUNT(*) FROM user WHERE username = ?"
 	var count int
 	err := db.QueryRow(queryExist, username).Scan(&count)
@@ -267,11 +277,13 @@ func RenderProfileTemplate(c *gin.Context) {
 		return
 	}
 
+	// If user does not exist, render a not found page
 	if count == 0 {
 		c.HTML(http.StatusOK, "notfounduser.html", gin.H{})
 		return
 	}
 
+	// Retrieve user session information
 	var userSession models.User
 	queryUserSession := "SELECT id, username FROM user WHERE id = ?"
 	err = db.QueryRow(queryUserSession, id).Scan(&userSession.ID, &userSession.Username)
@@ -283,6 +295,7 @@ func RenderProfileTemplate(c *gin.Context) {
 		return
 	}
 
+	// If user session's username does not match the requested username, render the other user's profile template
 	if userSession.Username != username {
 		views.RenderProfile(c, "other_profile.html", gin.H{
 			"username": username,
@@ -290,12 +303,15 @@ func RenderProfileTemplate(c *gin.Context) {
 		return
 	}
 
+	// Render the user's own profile template
 	views.RenderProfile(c, "profile.html", gin.H{
 		"username": username,
 	})
 }
 
+// EditProfile handles requests to edit the user's profile.
 func EditProfile(c *gin.Context) {
+	// Retrieve user ID from session
 	idInterface, exists := utils.AllSessions(c)
 	if exists == false || idInterface == nil {
 		c.Redirect(http.StatusUnauthorized, "/login")
@@ -307,14 +323,14 @@ func EditProfile(c *gin.Context) {
 	var fileBytes []byte
 	file, _, err := c.Request.FormFile("icon")
 	if err != nil && err != http.ErrMissingFile {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Erro ao obter a imagem do formulário"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error getting image from form"})
 		return
 	} else if err == nil {
 		defer file.Close()
 
 		fileBytes, err = ioutil.ReadAll(file)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao ler a imagem"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error reading image"})
 			return
 		}
 	}
@@ -356,7 +372,7 @@ func EditProfile(c *gin.Context) {
 			return
 		}
 		defer stmt.Close()
-	
+
 		_, err = stmt.Exec(name, bio, fileBytes, id)
 	} else {
 		stmt, err = db.Prepare("UPDATE user SET name=?, bio=? WHERE id=?")
@@ -366,7 +382,7 @@ func EditProfile(c *gin.Context) {
 			return
 		}
 		defer stmt.Close()
-	
+
 		_, err = stmt.Exec(name, bio, id)
 	}
 
