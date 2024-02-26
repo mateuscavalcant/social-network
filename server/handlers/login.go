@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"log"
-	CON "social-network-go/server/database"
+	"social-network-go/server/database"
 	"social-network-go/server/models"
 	"social-network-go/server/models/errs"
 	"social-network-go/server/utils"
@@ -36,7 +36,7 @@ func UserLogin(c *gin.Context) {
 	}
 
 	// Connect to the database
-	db := CON.DB()
+	db := database.GetDB()
 
 	// Query the user's ID, email, and password from the database based on the identifier
 	err := db.QueryRow("SELECT id, email, password FROM user WHERE "+queryField+"=?", identifier).Scan(&user.ID, &user.Email, &user.Password)

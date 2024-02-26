@@ -46,3 +46,18 @@ type UserProfile struct {
 	FollowByCount int    `json:"followbycount"`
 	FollowToCount int    `json:"followtocount"`
 }
+
+
+type UserMessage struct {
+	MessageSession bool `json:"messagesession"`
+	MessageID     int    `json:"post-id"`
+	MessageUserID int    `json:"post-user-id"`
+	UserID     int    `json:"user-id"`
+	Content    string `json:"content"`
+	Icon       []byte `json:"icon"`
+	IconBase64 string `json:"iconbase64"`
+	CreatedBy  string `json:"createdby"`
+	Name       string `json:"createdbyname"`
+	MessageBy int `json:"message-by"`
+	MessageTo  int `json:"message-to"`
+}

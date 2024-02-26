@@ -3,7 +3,7 @@ package handlers
 import (
 	"log"
 	"net/http"
-	CON "social-network-go/server/database"
+	"social-network-go/server/database"
 	"social-network-go/server/utils"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +16,7 @@ func Follow(c *gin.Context) {
 	// Retrieve the username of the user to be followed from the request body
 	username := c.PostForm("username")
 
-	db := CON.DB()
+	db := database.GetDB()
 
 	var userID int
 	// Query the database to get the ID of the user to be followed
@@ -62,7 +62,7 @@ func Unfollow(c *gin.Context) {
 	id, _ := utils.AllSessions(c)
 	// Retrieve the username of the user to be unfollowed from the request body
 	username := c.PostForm("username")
-	db := CON.DB()
+	db := database.GetDB()
 
 	var userID int
 	// Query the database to get the ID of the user to be unfollowed

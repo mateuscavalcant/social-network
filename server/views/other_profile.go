@@ -5,12 +5,11 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	CON "social-network-go/server/database"
+	"social-network-go/server/database"
 	"social-network-go/server/models"
 
 	"github.com/gin-gonic/gin"
 )
-
 
 // OtherProfileView renders the profile page of another user.
 func OtherProfileView(c *gin.Context) {
@@ -24,7 +23,7 @@ func OtherProfileView(c *gin.Context) {
 
 	// Extract the username parameter from the request URL
 	username := c.Param("username")
-	db := CON.DB()
+	db := database.GetDB()
 
 	// Query the database to retrieve the ID of the target user based on their username
 	queryUserID := "SELECT id FROM user WHERE username = ?"

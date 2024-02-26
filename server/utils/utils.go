@@ -8,7 +8,7 @@ import (
 
 func Err(err interface{}) {
 	if err != nil {
-		log.Fatal(err)
+		log.Println("Error: ", err)
 	}
 }
 

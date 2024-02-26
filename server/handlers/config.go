@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"log"
-	CON "social-network-go/server/database"
+	"social-network-go/server/database"
 	"social-network-go/server/models"
 	"social-network-go/server/models/errs"
 	"social-network-go/server/utils"
@@ -12,7 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
-
 
 // DeleteAccount handles the logic for deleting a user account.
 func DeleteAccount(c *gin.Context) {
@@ -45,7 +44,7 @@ func DeleteAccount(c *gin.Context) {
 	}
 
 	// Get a database connection
-	db := CON.DB()
+	db := database.GetDB()
 
 	// Prepare a query to retrieve user data based on the identifier
 	stmt, err := db.Prepare("SELECT id, email, password FROM user WHERE " + queryField + " = ?")

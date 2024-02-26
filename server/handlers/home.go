@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"log"
 	"net/http"
-	CON "social-network-go/server/database"
+	"social-network-go/server/database"
 	"social-network-go/server/models"
 	"social-network-go/server/models/errs"
 	"social-network-go/server/utils"
@@ -34,7 +34,7 @@ func Feed(c *gin.Context) {
 		return
 	}
 
-	db := CON.DB()
+	db := database.GetDB()
 
 	var post models.UserPost
 	post.UserID = id
@@ -125,7 +125,7 @@ func CreateNewPost(c *gin.Context) {
 	id, _ := strconv.Atoi(idInterface.(string))
 	userPost.Content = content
 
-	db := CON.DB()
+	db := database.GetDB()
 
 	var username string
 	err := db.QueryRow("SELECT username FROM user WHERE id = ?", id).Scan(&username)
@@ -187,7 +187,7 @@ func DeletePost(c *gin.Context) {
 		return
 	}
 
-	db := CON.DB()
+	db := database.GetDB()
 
 	var postAuthorID int
 	err = db.QueryRow("SELECT id FROM user_post WHERE postID=?", postID).Scan(&postAuthorID)

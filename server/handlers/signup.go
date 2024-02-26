@@ -3,7 +3,7 @@ package handlers
 import (
 	"io/ioutil"
 	"log"
-	CON "social-network-go/server/database"
+	"social-network-go/server/database"
 	"social-network-go/server/models"
 	"social-network-go/server/models/errs"
 	"social-network-go/server/validators"
@@ -90,7 +90,7 @@ func Signup(c *gin.Context) {
 	user.Icon = fileBytes
 
 	// Connect to the database
-	db := CON.DB()
+	db := database.GetDB()
 
 	// Prepare SQL statement for user insertion
 	query := "INSERT INTO user (username, name, bio, email, password, icon) VALUES (?, ?, ?, ?, ?, ?)"

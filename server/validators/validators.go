@@ -3,7 +3,7 @@ package validators
 import (
 	"encoding/base64"
 	"regexp"
-	CON "social-network-go/server/database"
+	"social-network-go/server/database"
 
 	"github.com/badoux/checkmail"
 	"golang.org/x/crypto/bcrypt"
@@ -32,7 +32,7 @@ func ValidateFormatUsername(username string) bool {
 }
 
 func ExistEmail(email string) (bool, error) {
-	db := CON.DB()
+	db := database.GetDB()
 
 	var emailCount int
 
@@ -45,7 +45,7 @@ func ExistEmail(email string) (bool, error) {
 }
 
 func ExistUsername(username string) (bool, error) {
-	db := CON.DB()
+	db := database.GetDB()
 
 	var userCount int
 

@@ -2,7 +2,8 @@ package main
 
 import (
 	"log"
-	"os"
+	"net/http"
+	"social-network-go/server/database"
 	"social-network-go/server/routes"
 
 	"github.com/gin-contrib/gzip"
@@ -16,16 +17,16 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	database.InitializeDB()
+
 	r := gin.Default()
 	r.Use(gzip.Gzip(gzip.DefaultCompression))
 	r.LoadHTMLGlob("client/templates/*")
 	r.Static("/client", "./client")
 
 	routes.InitRoutes(r.Group("/"))
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	err = http.ListenAndServe(":8080", r)
+	if err != nil {
+		log.Fatal("Failed to start server: ", err)
 	}
-	r.Run(":" + port)
 }

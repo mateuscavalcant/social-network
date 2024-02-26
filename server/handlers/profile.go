@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	CON "social-network-go/server/database"
+	"social-network-go/server/database"
 	"social-network-go/server/models"
 	"social-network-go/server/models/errs"
 	"social-network-go/server/utils"
@@ -27,7 +27,7 @@ import (
 func AnotherUserProfile(c *gin.Context) {
 	// Extract username from request parameters
 	username := c.Param("username")
-	db := CON.DB()
+	db := database.GetDB()
 	var targetUserID int
 	post.UserID = targetUserID
 
@@ -159,7 +159,7 @@ func Profile(c *gin.Context) {
 	// Retrieve user ID from session
 	idInterface, _ := utils.AllSessions(c)
 	id, _ := strconv.Atoi(idInterface.(string))
-	db := CON.DB()
+	db := database.GetDB()
 
 	post.UserID = id
 
@@ -263,7 +263,7 @@ func RenderProfileTemplate(c *gin.Context) {
 	// Retrieve username from request parameters
 	username := c.Param("username")
 
-	db := CON.DB()
+	db := database.GetDB()
 
 	// Check if the user with the given username exists
 	queryExist := "SELECT COUNT(*) FROM user WHERE username = ?"
@@ -354,7 +354,7 @@ func EditProfile(c *gin.Context) {
 		return
 	}
 
-	db := CON.DB()
+	db := database.GetDB()
 
 	stmt, err := db.Prepare("UPDATE user SET name=?, bio=? WHERE id=?")
 	if err != nil {

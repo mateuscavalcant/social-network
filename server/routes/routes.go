@@ -29,7 +29,8 @@ func InitRoutes(r *gin.RouterGroup) {
 	r.POST("/profile/:username", handlers.AnotherUserProfile)
 	r.GET("/edit-profile", views.EditProfileView)
 	r.POST("/edit-profile", handlers.EditProfile)
+	r.POST("create-message/:username", handlers.CreateNewMessage)
+	r.POST("/chat/:username", handlers.Chat)
+	r.GET("/chat/:username", views.ChatView)
+	r.GET("/websocket/:username", handlers.WebSocketHandler)
 }
-
-
-

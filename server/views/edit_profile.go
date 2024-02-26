@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	CON "social-network-go/server/database"
+	"social-network-go/server/database"
 	"social-network-go/server/models"
 	"social-network-go/server/utils"
 	"strconv"
@@ -23,7 +23,7 @@ func EditProfileView(c *gin.Context) {
 	// Retrieve the current user's ID from the session
 	idInterface, _ := utils.AllSessions(c)
 	id, _ := strconv.Atoi(idInterface.(string))
-	db := CON.DB()
+	db := database.GetDB()
 
 	// Query the database to retrieve user profile information
 	query := `SELECT name, bio, icon FROM user WHERE id = ?`
