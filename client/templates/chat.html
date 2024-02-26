@@ -250,6 +250,7 @@
             ws.onclose = function () {
                 console.log("WebSocket connection closed. Reconnecting...");
                 setTimeout(setupWebSocket, 1000);
+                loadPosts();
             };
         }
 
@@ -342,7 +343,6 @@
             }
         });
 
-    </script>
     </script>
 </body>
 
