@@ -1,0 +1,137 @@
+.chats-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto; 
+    margin-left: 190px; 
+}
+
+.chats {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    margin-bottom: 0; 
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.chats-item {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    margin-bottom: 0; 
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.chats header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.chats .chats-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.chats .post-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.chats-title {
+    margin-left: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+
+.chats .user-details {
+    display: flex;
+    align-items: center;
+    font-size: medium;
+}
+
+.chats .chats-name p {
+    font-size: medium;
+    margin: 0;
+}
+
+.chats-title {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+
+.chats-main {
+    margin-left: 60px;
+    display: flex;
+    
+    margin-top: 20px;
+}
+
+.chats .chats-name {
+    margin-top: -30px;
+    color: #000000;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 5px; 
+}
+
+.chats .chats-content p {
+    margin-top: -35px;
+    color: #3d3d3d;
+    font-weight: normal;
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    flex-grow: 1; 
+}
+
+
+.chats .post-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.chats .post-info .chats-name, .chats .post-info .chats-content {
+    display: flex;
+    align-items: center;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .home-container {
+        padding: 10px;
+    }
+
+    .chats{
+        padding: 10px;
+    }
+
+    .chats header {
+        flex-wrap: wrap;
+    }
+
+    .chats .chats-icon {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .chats .post-links img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .chats .user-details {
+        flex-wrap: wrap;
+    }
+
+    .chats .chats-name, .chats .chats-content {
+        margin-right: 0;
+    }
+}

@@ -1,0 +1,252 @@
+.bar-btn-container {
+    position: fixed;
+    display: flex; 
+    align-items: center;
+    height: 50vh;
+}
+
+.vertical-bar {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    padding: 50px;
+    margin: auto;
+    
+}
+
+.vertical-bar button {
+    border: none; 
+    background: none;
+    margin: 10px 0; 
+    padding: 10px; 
+    cursor: pointer; 
+}
+
+.vertical-bar img {
+    width: 24px; 
+    height: 24px; 
+}
+
+
+
+.home-container {
+    
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto; 
+    margin-left: 190px; 
+}
+
+
+.create-post-container2 p {
+    margin-left: 15px;
+    font-size: larger;
+    font-weight: 600;
+}
+
+.create-post-container2 {
+    margin-bottom: 0; 
+    word-wrap: break-word;
+    overflow: auto;
+    display: flex;
+    align-items: flex-start;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    position: relative;
+    z-index: 1;
+}
+
+.create-post-container {
+    margin-bottom: 0; 
+    word-wrap: break-word;
+    overflow: auto;
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid #ccc;
+    position: relative;
+    z-index: 1;
+}
+
+.create-post-container-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 15px; 
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.create-post-container form {
+    display: flex;
+    align-items: flex-start; 
+    width: 100%;
+}
+
+.create-post-container textarea {
+    flex: 1;
+    font-size: 20px;
+  font-weight: 500;
+    padding: 8px;
+    border: none;
+    outline: none;
+    resize: none;
+    min-height: 70px;
+    margin-left: 10px; 
+    margin-top: 10px; 
+    text-align: left; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.create-post-container textarea::placeholder {
+    
+    font-weight: 500;
+    font-size: 17px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.create-post-container button {
+    margin: 10px; 
+    padding: 10px 22px;
+    background-color: #000000;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 19px;
+    cursor: pointer;
+}
+
+.post {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    margin-bottom: 0; 
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.post header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post .profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.post .post-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-title {
+    margin-left: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.post .user-details {
+    display: flex;
+    align-items: center;
+    font-size: medium;
+}
+
+.post .user-name p {
+    font-size: medium;
+    margin: 0;
+}
+
+.post .user-name {
+    display: flex;
+    align-items: center;
+    margin-right: 4px;
+    margin-left: -60px;
+    margin-top: -39px;
+    color: #000000;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.post .user-username {
+    margin-top: -39px;
+    display: flex;
+    align-items: center;
+    color: #6f6f6f;
+    font-weight: normal;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+}
+
+.post main {
+    margin-bottom: 10px;
+}
+.post .post-content p {
+    display: flex;
+    align-items: center;
+    color: #3d3d3d;
+    margin-top: 10px;
+    
+    font-weight: normal;
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.post .post-links {
+    display: flex;
+    align-items: center;
+}
+
+.post .post-links img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.post .like-button {
+    cursor: pointer;
+}
+
+.post footer {
+    font-size: 12px;
+    color: #888;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .home-container {
+        padding: 10px;
+    }
+
+    .post {
+        padding: 10px;
+    }
+
+    .post header {
+        flex-wrap: wrap;
+    }
+
+    .post .profile-icon {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .post .post-links img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .post .user-details {
+        flex-wrap: wrap;
+    }
+
+    .post .user-name, .post .user-username {
+        margin-right: 0;
+    }
+}

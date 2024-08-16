@@ -1,0 +1,236 @@
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .chat-bar-btn-container {
+    position: fixed;
+    display: flex; 
+    align-items: center; 
+    height: 73vh; 
+  }
+  
+  .chat-vertical-bar {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    
+    padding: 70px; 
+    
+  }
+  
+  .chat-vertical-bar button {
+    border: none; 
+    background: none;
+    margin: 10px 0; 
+    padding: 10px; 
+    cursor: pointer; 
+  }
+  
+  .chat-vertical-bar img {
+    width: 28px; 
+    height: 28px; 
+  }
+  
+  .home-header {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 620px;
+    height: 45px;
+    margin-left: 190px;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    z-index: 2;
+    margin-bottom: 10px;
+  }
+  
+  .header-home-screen {
+    display: flex;
+    justify-content: flex-start; 
+    align-items: center;
+    margin-top: -10px;
+    margin-left: 20px;
+  }
+  
+  .header-home-screen .profile-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: -60px;
+    position: absolute;
+  }
+  
+  
+  .header-home-screen .header-name {
+    color: #000000;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+    margin-left: 60px;
+  
+  }
+  
+  #messages-container {
+    border: 1px solid #ccc;
+    width: 640px;
+    height: 100%;
+    margin-left: calc(50% - 310px);
+    left: 0;
+    right: 0;
+    margin-top: 66px;
+    margin-bottom: 90px;
+    margin-left: 190px; 
+  }
+  
+  
+  .message-session {
+    position: relative;
+    text-align: right;
+    margin-bottom: 10px;
+    margin-right: 5%;
+  }
+  
+  
+  .message-session .message-box {
+    background-color: rgb(48, 41, 255);
+    overflow-wrap: break-word;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 40%;
+    min-width: 5%;
+    display: inline-block;
+    position: relative;
+    margin: 0 auto;
+    margin-right: initial;
+    margin-bottom: 10px;
+  }
+  
+  .message-session .message-box:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -5px;
+    width: 0;
+    height: 0;
+    border-top: 11px solid transparent;
+    border-bottom: 13px solid transparent;
+    border-left: 13px solid rgb(48, 41, 255);
+  }
+  
+  
+  .message-to {
+    position: relative;
+    text-align: left;
+    margin-bottom: 10px;
+    margin-left: 5%;
+  }
+  
+  .message-to .message-box {
+    background-color: #4a4a4a;
+    overflow-wrap: break-word;
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    max-width: 40%;
+    min-width: 5%;
+    position: relative;
+    margin: 0 auto;
+    margin-left: initial;
+    margin-bottom: 10px;
+  }
+  
+  .message-to .message-box:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -5px;
+    width: 0;
+    height: 0;
+    border-top: 11px solid transparent;
+    border-bottom: 13px solid transparent;
+    border-right: 13px solid #4a4a4a;
+  }
+  
+  
+  
+  .post-content p {
+    font-size: medium;
+    color: #fff;
+    margin: 0;
+    text-align: center;
+  }
+  
+  .message-to .user-name {
+    margin-left: 0%;
+    margin-top: 5px;
+  }
+  
+  .message-session .user-name {
+    margin-left: 94.5%;
+    margin-top: 5px;
+  }
+  
+  
+  .user-name p {
+    font-size: small;
+    margin: 0;
+  }
+  
+  .message-form-create {
+    display: flex;
+    height: 90px;
+    width: 640px;
+    margin-left: 190px;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    margin-bottom: 50px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    word-wrap: break-word;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    position: fixed;
+  }
+  
+  .message-form-create input {
+    color: #ffffff;
+    background-color: #aaaaaa;
+    border: 1px solid #aaaaaa;
+    height: 45px;
+    width: 410px;
+    font-size: 20px;
+    font-weight: 500;
+    padding-left: 32px;
+    border-radius: 17px;
+    overflow-wrap: break-word;
+  }
+  
+  .message-form-create input::placeholder {
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff;
+  }
+  
+  .message-form-create button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    color: #ffffff;
+    background: #aaaaaa;
+    border: 1px solid #aaaaaa;
+    border-radius: 50%;
+    font-size: 15px;
+    transition: 0.4s ease;
+    margin-left: 10px;
+  }
