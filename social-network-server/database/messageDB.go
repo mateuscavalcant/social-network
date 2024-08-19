@@ -58,15 +58,15 @@ func GetUserMessages(user1ID, user2ID int) ([]models.UserMessage, error) {
 }
 
 // Obter informações de usuário por ID
-func GetUserInfo(userID int) (string, []byte, error) {
+func GetUserInfo(userID int) (string, string, []byte, error) {
 	db := database.GetDB()
-	var name string
+	var name, username string
 	var icon []byte
-	err := db.QueryRow("SELECT name, icon FROM user WHERE id = ?", userID).Scan(&name, &icon)
+	err := db.QueryRow("SELECT name, username, icon FROM user WHERE id = ?", userID).Scan(&name, &username, &icon)
 	if err != nil {
-		return "", nil, fmt.Errorf("failed to query user info: %w", err)
+		return "", "", nil, fmt.Errorf("failed to query user info: %w", err)
 	}
-	return name, icon, nil
+	return name, username, icon, nil
 }
 
 // Salvar nova mensagem

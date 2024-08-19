@@ -22,13 +22,13 @@ const Messages = () => {
                 Authorization: `Bearer ${token}`
             }
         })
-        .then(response => {
-            setChats(response.data.chats);
-            setChatPartner(response.data.chatPartner || { name: '', iconBase64: '' });
-        })
-        .catch(error => {
-            console.error("Failed to load posts:", error.response ? error.response.data : error.message);
-        });
+            .then(response => {
+                setChats(response.data.chats);
+                setChatPartner(response.data.chatPartner || { name: '', iconBase64: '' });
+            })
+            .catch(error => {
+                console.error("Failed to load posts:", error.response ? error.response.data : error.message);
+            });
     });
 
     const handleProfile = (username) => {
@@ -37,16 +37,16 @@ const Messages = () => {
                 Authorization: `Bearer ${token}`
             }
         })
-        .then(response => {
-            window.location.replace(`/${username}`);
-        })
-        .catch(error => {
-            console.error("Failed to fetch profile:", error.response ? error.response.data : error.message);
-        });
+            .then(response => {
+                window.location.replace(`/${username}`);
+            })
+            .catch(error => {
+                console.error("Failed to fetch profile:", error.response ? error.response.data : error.message);
+            });
     };
 
     const setupWebSocket = useCallback(() => {
-        if (!token) return; 
+        if (!token) return;
 
         const wsURL = `ws://localhost:8080/chats?token=${token}`;
         const ws = new WebSocket(wsURL);
@@ -86,12 +86,12 @@ const Messages = () => {
                 Authorization: `Bearer ${token}`
             }
         })
-        .then(response => {
-            window.location.replace(`chat/${username}`);
-        })
-        .catch(error => {
-            console.error("Failed to fetch Chat:", error.response ? error.response.data : error.message);  // Log detalhado de erro
-        });
+            .then(response => {
+                window.location.replace(`chat/${username}`);
+            })
+            .catch(error => {
+                console.error("Failed to fetch Chat:", error.response ? error.response.data : error.message);  // Log detalhado de erro
+            });
     };
 
     return (
@@ -119,7 +119,7 @@ const Messages = () => {
                         <img src="/images/search.png" alt="Search" />
                     </button>
                     <button id='envelope-btn'>
-                    <img
+                        <img
                             src="/images/envelope-solid.png"
                             alt="Messages"
                             onClick={() => window.location.replace('chats')}
@@ -130,63 +130,63 @@ const Messages = () => {
                         <img src="/images/config.png" alt="Configure" />
                     </button>
                     <button id='logout-btn'>
-                    <img
+                        <img
                             src="/images/logout.png"
                             alt="Messages"
                             onClick={() => handleLogout()}
                             style={{ cursor: 'pointer' }}
                         />
                     </button>
-            
+
                 </div>
-        </div>
-        <div className="chats-container">
-            <div id="chats-container">
-                {chats.map(post => (
-                    <div className="chats" onClick={() => HandleMessage(post.createdby)}
-                    style={{ cursor: 'pointer' }} key={post.postID}>
-                        <header>
-                            {post.iconbase64 ? (
-                                <img 
-                                    src={`data:image/jpeg;base64,${post.iconbase64}`} 
-                                    alt="Profile" 
-                                    className="chats-icon" 
-                                    onClick={() => HandleMessage(post.createdby)} 
-                                    style={{ cursor: 'pointer' }}
-                                />
-                            ) : (
-                                <img 
-                                    src="default-profile-icon.png" 
-                                    alt="Profile" 
-                                    className="chats-icon" 
-                                    onClick={() => HandleMessage(post.createdby)} 
-                                    style={{ cursor: 'pointer' }}
-                                />
-                            )}
-                            <div className="chats-title">
-                                <div className="chats-name" onClick={() => HandleMessage(post.createdby)}  style={{ cursor: 'pointer' }}>
-                                    <p>{post.createdbyname}</p>
+            </div>
+            <div className="chats-container">
+                <div id="chats-container">
+                    {chats.map(post => (
+                        <div className="chats" onClick={() => HandleMessage(post.createdby)}
+                            style={{ cursor: 'pointer' }} key={post.postID}>
+                            <header>
+                                {post.iconbase64 ? (
+                                    <img
+                                        src={`data:image/jpeg;base64,${post.iconbase64}`}
+                                        alt="Profile"
+                                        className="chats-icon"
+                                        onClick={() => HandleMessage(post.createdby)}
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                ) : (
+                                    <img
+                                        src="default-profile-icon.png"
+                                        alt="Profile"
+                                        className="chats-icon"
+                                        onClick={() => HandleMessage(post.createdby)}
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                )}
+                                <div className="chats-title">
+                                    <div className="chats-name" onClick={() => HandleMessage(post.createdby)} style={{ cursor: 'pointer' }}>
+                                        <p>{post.createdbyname}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </header>
-                        <main>
-                        <div className="chats-main">
-                        <div className="chats-content">
-                                    <p>{post.content}</p>
+                            </header>
+                            <main>
+                                <div className="chats-main">
+                                    <div className="chats-content">
+                                        <p>{post.content}</p>
+                                    </div>
                                 </div>
+                                <div className="chats-links">
                                 </div>
-                            <div className="chats-links">
-                            </div>
-                        </main>
-                        <footer>
-                        </footer>
-                    </div>
-                ))}
+                            </main>
+                            <footer>
+                            </footer>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
-        </div>
     );
-    
+
 };
 
 export default Messages;

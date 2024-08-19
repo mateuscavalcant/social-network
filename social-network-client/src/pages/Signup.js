@@ -9,7 +9,7 @@ const SignupForm = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleSubmit = () => {
         const formData = new FormData();
@@ -18,7 +18,7 @@ const SignupForm = () => {
         formData.append("email", email);
         formData.append("password", password);
         formData.append("confirm_password", confirmPassword);
-        
+
 
         fetch("http://localhost:8080/signup", {
             method: "POST",
@@ -49,51 +49,51 @@ const SignupForm = () => {
                 <h2 className="header">Sign Up</h2>
                 <div className="field">
 
-                <input
-                    className="input"
-                    type="text"
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
+                    <input
+                        className="input"
+                        type="text"
+                        placeholder="Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
                 </div>
                 <div className="field">
-                <input
-                    className="input"
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
+                    <input
+                        className="input"
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
                 </div>
                 <div className="field">
-                <input
-                    className="input"
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+                    <input
+                        className="input"
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                 </div>
                 <div className="field">
-                <input
-                    className="input"
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                    <input
+                        className="input"
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </div>
                 <div className="field">
-                <input
-                    className="input"
-                    type="password"
-                    placeholder="Confirm password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+                    <input
+                        className="input"
+                        type="password"
+                        placeholder="Confirm password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
                 </div>
-                
+
                 {error && <p className="error">{error}</p>}
                 <button className="button" onClick={handleSubmit}>
                     Create Account

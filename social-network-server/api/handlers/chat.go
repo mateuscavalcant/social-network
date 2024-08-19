@@ -15,6 +15,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
@@ -22,9 +23,8 @@ import (
 // userConnections mapeia IDs de usuário para conexões WebSocket
 // Canais para enviar mensagens
 var (
-	userMessageConnections map[int64]*websocket.Conn
-	messageQueue           = make(chan models.UserMessage, 100) // Buffer de 100 mensagens
-
+	userMessageConnections   map[int64]*websocket.Conn
+	messageQueue             = make(chan models.UserMessage, 100) // Buffer de 100 mensagens
 	connectionMessageMutexes sync.Map
 )
 
@@ -62,7 +62,7 @@ func Chat(c *gin.Context) {
 		return
 	}
 
-	chatPartnerName, chatPartnerIcon, err := service.GetChatPartnerInfo(partnerID)
+	chatPartnerName, chatPartnerUsername, chatPartnerIcon, err := service.GetChatPartnerInfo(partnerID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve chat partner info"})
 		return
@@ -70,7 +70,7 @@ func Chat(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"messages":    messages,
-		"chatPartner": gin.H{"name": chatPartnerName, "iconBase64": chatPartnerIcon},
+		"chatPartner": gin.H{"name": chatPartnerName, "username": chatPartnerUsername, "iconBase64": chatPartnerIcon},
 	})
 }
 
@@ -81,28 +81,40 @@ func sendMessage(message models.UserMessage) {
 
 // Função para lidar com as mensagens WebSocket
 func handleWebSocketMessages() {
-	for {
-		// Aguarda mensagens no canal
-		message := <-messageQueue
+	const workerCount = 5
 
-		// Verifique se o destinatário está conectado
+	for i := 0; i < workerCount; i++ {
+		go worker()
+	}
+}
+
+func worker() {
+	for message := range messageQueue {
 		destConn, ok := userMessageConnections[int64(message.MessageTo)]
 		if !ok {
 			log.Println("Recipient is not connected")
 			continue
 		}
+		err := destConn.WriteJSON(message)
 
-		// Envie a mensagem para o destinatário
-		err := destConn.WriteJSON(message) // Use WriteJSON para enviar mensagens JSON via WebSocket
 		if err != nil {
-			log.Println("Error sending message:", err)
-			continue
+			log.Println("Error sending message: ", err)
 		}
+
 	}
 }
 
 // WebSocketHandler é um manipulador HTTP para a rota WebSocket.
 func WebSocketHandler(c *gin.Context) {
+
+	cookie, errCookie := c.Request.Cookie("token")
+
+	if errCookie != nil {
+		log.Println("Cookie do tokeb não encontrado")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Cookie do token não foi encontrado"})
+		return
+	}
+	tokenString := cookie.Value
 	userId, exists := c.Get("id")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in session"})
@@ -114,8 +126,36 @@ func WebSocketHandler(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
 		return
 	}
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Método de assinatura inesperado: %v", token.Header["alg"])
+		}
+		return []byte("your_secret_key"), nil
+	})
+
+	if err != nil || !token.Valid {
+		log.Println("Token JWT inválido:", err)
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token JWT inválido"})
+		return
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok || !token.Valid {
+		log.Println("Token JWT inválido")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token JWT inválido"})
+		return
+	}
+
+	id, ok = claims["id"].(int)
+	if !ok {
+		log.Println("ID do usuário não encontrado no token")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário não encontrado no token"})
+		return
+	}
+
 	// Atualizar a conexão para WebSocket
-	ws, err := websocket.Upgrade(c.Writer, c.Request, nil, 1024, 1024)
+	ws, err := websocket.Upgrade(c.Writer, c.Request, nil, 4096, 4096)
 	if err != nil {
 		log.Println("Erro ao atualizar para WebSocket:", err)
 		return
@@ -142,7 +182,7 @@ func HandleMessages(ws *websocket.Conn) {
 		}
 
 		// Envie a mensagem para o canal
-		sendMessage(msg)
+		go sendMessage(msg)
 	}
 }
 

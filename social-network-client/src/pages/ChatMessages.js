@@ -7,8 +7,8 @@ const ChatMessages = () => {
   const [messages, setMessages] = useState([]);
   const [content, setContent] = useState('');
   const [autoScroll, setAutoScroll] = useState(true);
-  const [chatPartner, setChatPartner] = useState({ name: '', iconBase64: '' });
-  const [chatPartnerUsername, setChatPartnerUsername] = useState({ username: ''});
+  const [chatPartner, setChatPartner] = useState({ name: '', iconBase64: '', username: '' });
+  const [chatPartnerUsername, setChatPartnerUsername] = useState({ username: '' });
   const username = window.location.pathname.split("/").pop();
   const token = localStorage.getItem('token');
 
@@ -21,7 +21,7 @@ const ChatMessages = () => {
       });
       setMessages(response.data.messages || []);
       setChatPartner(response.data.chatPartner || { name: '', iconBase64: '' });
-      setChatPartnerUsername(response.data.chatPartnerUsername || { username: ''});
+      setChatPartnerUsername(response.data.chatPartnerUsername || { username: '' });
 
       if (autoScroll) {
         window.scrollTo(0, document.body.scrollHeight);
@@ -32,8 +32,10 @@ const ChatMessages = () => {
   }, [username, token, autoScroll]);
 
   const setupWebSocket = useCallback(() => {
+    document.cookie = token;
     const wsURL = `ws://localhost:8080/websocket/${username}`;
     const ws = new WebSocket(wsURL);
+    console.log(token);
 
     ws.onopen = () => {
       console.log('WebSocket connection established.');
@@ -95,51 +97,51 @@ const ChatMessages = () => {
 
   return (
     <div className='chat-page'>
-            <div className="chat-bar-btn-container">
-                <div className="chat-vertical-bar">
-                    <button id="home-btn">
-                        <img
-                            src="/images/home.png"
-                            alt="Home"
-                            onClick={() => window.location.replace('http://localhost:3000/home')}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-                    <button id="profile-btn">
-                        <img
-                            src="/images/profile.png"
-                            alt="Profile"
-                            onClick={() => handleProfile(chatPartnerUsername.username)}
+      <div className="chat-bar-btn-container">
+        <div className="chat-vertical-bar">
+          <button id="home-btn">
+            <img
+              src="/images/home.png"
+              alt="Home"
+              onClick={() => window.location.replace('http://localhost:3000/home')}
+              style={{ cursor: 'pointer' }}
+            />
+          </button>
+          <button id="profile-btn">
+            <img
+              src="/images/profile.png"
+              alt="Profile"
+              onClick={() => handleProfile(chatPartnerUsername.username)}
 
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-                    <button id="search-btn">
-                        <img src="/images/search.png" alt="Search" />
-                    </button>
-                    <button id='envelope-btn'>
-                    <img
-                            src="/images/envelope-solid.png"
-                            alt="Messages"
-                            onClick={() => window.location.replace('http://localhost:3000/chats')}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-                    <button id="configure-btn">
-                        <img src="/images/config.png" alt="Configure" />
-                    </button>
+              style={{ cursor: 'pointer' }}
+            />
+          </button>
+          <button id="search-btn">
+            <img src="/images/search.png" alt="Search" />
+          </button>
+          <button id='envelope-btn'>
+            <img
+              src="/images/envelope-solid.png"
+              alt="Messages"
+              onClick={() => window.location.replace('http://localhost:3000/chats')}
+              style={{ cursor: 'pointer' }}
+            />
+          </button>
+          <button id="configure-btn">
+            <img src="/images/config.png" alt="Configure" />
+          </button>
 
-                    <button id='logout-btn'>
-                    <img
-                            src="/images/logout.png"
-                            alt="Messages"
-                            onClick={() => handleLogout()}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-            
-                </div>
+          <button id='logout-btn'>
+            <img
+              src="/images/logout.png"
+              alt="Messages"
+              onClick={() => handleLogout()}
+              style={{ cursor: 'pointer' }}
+            />
+          </button>
+
         </div>
+      </div>
       <div className="home-header">
         <header>
           <div className="header-home-screen">
@@ -148,10 +150,13 @@ const ChatMessages = () => {
                 src={`data:image/jpeg;base64,${chatPartner.iconBase64}`}
                 className="profile-icon"
                 alt="profile"
+                onClick={() => handleProfile(chatPartner.username)}
+                style={{ cursor: 'pointer' }}
               />
             )}
             <div className='header-name'>
-              <p>{chatPartner.name}</p>
+              <p onClick={() => handleProfile(chatPartner.username)}
+                style={{ cursor: 'pointer' }}>{chatPartner.name}</p>
             </div>
           </div>
         </header>

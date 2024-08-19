@@ -1,29 +1,31 @@
 .chats-container {
     position: relative;
     max-width: 600px;
-    margin: 0 auto; 
-    margin-left: 190px; 
+    margin: 0 auto;
+    margin-left: 190px;
 }
 
 .chats {
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
-    margin-bottom: 0; 
+    margin-bottom: 0;
     padding: 15px;
     background-color: #f9f9f9;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .chats-item {
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
-    margin-bottom: 0; 
+    margin-bottom: 0;
     padding: 15px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     background-color: #f9f9f9;
 }
 
 .chats header {
-    display: flex;
-    align-items: center;
     margin-bottom: 10px;
 }
 
@@ -53,43 +55,49 @@
     font-size: medium;
 }
 
-.chats .chats-name p {
-    font-size: medium;
-    margin: 0;
-}
 
 .chats-title {
     margin-left: 10px;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: flex-start;
     margin-top: 20px;
 }
 
-.chats-main {
-    margin-left: 60px;
-    display: flex;
-    
-    margin-top: 20px;
+.chats main {
+    margin-bottom: 10px;
 }
 
 .chats .chats-name {
-    margin-top: -30px;
+    display: flex;
+    align-items: center;
+    margin-right: 4px;
+    margin-left: -10px;
+    margin-top: -39px;
     color: #000000;
     font-weight: bold;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 15px;
     cursor: pointer;
-    margin-bottom: 5px; 
+}
+
+.chats .chats-content {
+    display: flex;
+    margin-left: 50px;
+    margin-top: -40px;
+
 }
 
 .chats .chats-content p {
-    margin-top: -35px;
     color: #3d3d3d;
+    margin-top: 10px;
     font-weight: normal;
     font-size: 15px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    flex-grow: 1; 
+    max-width: 100%;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 
@@ -98,7 +106,8 @@
     flex-direction: column;
 }
 
-.chats .post-info .chats-name, .chats .post-info .chats-content {
+.chats .post-info .chats-name,
+.chats .post-info .chats-content {
     display: flex;
     align-items: center;
 }
@@ -109,7 +118,7 @@
         padding: 10px;
     }
 
-    .chats{
+    .chats {
         padding: 10px;
     }
 
@@ -131,7 +140,8 @@
         flex-wrap: wrap;
     }
 
-    .chats .chats-name, .chats .chats-content {
+    .chats .chats-name,
+    .chats .chats-content {
         margin-right: 0;
     }
 }

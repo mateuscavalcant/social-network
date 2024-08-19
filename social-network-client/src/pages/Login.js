@@ -40,7 +40,7 @@ const LoginForm = () => {
                 localStorage.setItem('token', token);
 
                 console.log('Token:', token);
-                navigate('/home'); 
+                navigate('/home');
             }
         } catch (error) {
             console.error(error);
@@ -50,7 +50,7 @@ const LoginForm = () => {
     return (
         <div className="container">
             <div className="form">
-            <h2 className="header">Sign In</h2>
+                <h2 className="header">Sign In</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="field">
                         <input

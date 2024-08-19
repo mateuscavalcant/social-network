@@ -1,40 +1,40 @@
 .bar-btn-container {
     position: fixed;
-    display: flex; 
+    display: flex;
     align-items: center;
     height: 50vh;
 }
 
 .vertical-bar {
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 50px;
     margin: auto;
-    
+
 }
 
 .vertical-bar button {
-    border: none; 
+    border: none;
     background: none;
-    margin: 10px 0; 
-    padding: 10px; 
-    cursor: pointer; 
+    margin: 10px 0;
+    padding: 10px;
+    cursor: pointer;
 }
 
 .vertical-bar img {
-    width: 24px; 
-    height: 24px; 
+    width: 24px;
+    height: 24px;
 }
 
 
 
 .home-container {
-    
+
     position: relative;
     max-width: 600px;
-    margin: 0 auto; 
-    margin-left: 190px; 
+    margin: 0 auto;
+    margin-left: 190px;
 }
 
 
@@ -45,7 +45,7 @@
 }
 
 .create-post-container2 {
-    margin-bottom: 0; 
+    margin-bottom: 0;
     word-wrap: break-word;
     overflow: auto;
     display: flex;
@@ -57,7 +57,7 @@
 }
 
 .create-post-container {
-    margin-bottom: 0; 
+    margin-bottom: 0;
     word-wrap: break-word;
     overflow: auto;
     display: flex;
@@ -71,41 +71,41 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    margin-left: 15px; 
+    margin-left: 15px;
     margin-top: 10px;
     cursor: pointer;
 }
 
 .create-post-container form {
     display: flex;
-    align-items: flex-start; 
+    align-items: flex-start;
     width: 100%;
 }
 
 .create-post-container textarea {
     flex: 1;
     font-size: 20px;
-  font-weight: 500;
+    font-weight: 500;
     padding: 8px;
     border: none;
     outline: none;
     resize: none;
     min-height: 70px;
-    margin-left: 10px; 
-    margin-top: 10px; 
-    text-align: left; 
+    margin-left: 10px;
+    margin-top: 10px;
+    text-align: left;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .create-post-container textarea::placeholder {
-    
+
     font-weight: 500;
     font-size: 17px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .create-post-container button {
-    margin: 10px; 
+    margin: 10px;
     padding: 10px 22px;
     background-color: #000000;
     color: #fff;
@@ -118,14 +118,15 @@
 .post {
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
-    margin-bottom: 0; 
+    margin-bottom: 0;
     padding: 15px;
     background-color: #f9f9f9;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .post header {
-    display: flex;
-    align-items: center;
+
     margin-bottom: 10px;
 }
 
@@ -137,15 +138,13 @@
 }
 
 .post .post-info {
-    display: flex;
+
     flex-direction: column;
 }
 
 .post-title {
     margin-left: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+
     margin-top: 10px;
 }
 
@@ -153,11 +152,6 @@
     display: flex;
     align-items: center;
     font-size: medium;
-}
-
-.post .user-name p {
-    font-size: medium;
-    margin: 0;
 }
 
 .post .user-name {
@@ -174,7 +168,6 @@
 }
 
 .post .user-username {
-    margin-top: -39px;
     display: flex;
     align-items: center;
     color: #6f6f6f;
@@ -186,15 +179,22 @@
 .post main {
     margin-bottom: 10px;
 }
-.post .post-content p {
+
+.post .post-content {
     display: flex;
-    align-items: center;
+
+}
+
+.post .post-content p {
     color: #3d3d3d;
     margin-top: 10px;
-    
     font-weight: normal;
     font-size: 15px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 100%;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .post .post-links {
@@ -246,7 +246,8 @@
         flex-wrap: wrap;
     }
 
-    .post .user-name, .post .user-username {
+    .post .user-name,
+    .post .user-username {
         margin-right: 0;
     }
 }
