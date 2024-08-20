@@ -11,6 +11,7 @@ const ChatMessages = () => {
   const [chatPartnerUsername, setChatPartnerUsername] = useState({ username: '' });
   const username = window.location.pathname.split("/").pop();
   const token = localStorage.getItem('token');
+  const cookie = document.cookie = `token=${token}; path=/; Secure; SameSite=Strict`;
 
   const loadPosts = useCallback(async () => {
     try {
@@ -32,7 +33,8 @@ const ChatMessages = () => {
   }, [username, token, autoScroll]);
 
   const setupWebSocket = useCallback(() => {
-    document.cookie = token;
+    if (!cookie) return;
+
     const wsURL = `ws://localhost:8080/websocket/${username}`;
     const ws = new WebSocket(wsURL);
     console.log(token);

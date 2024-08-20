@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	repo "social-network-server/database"
-	"social-network-server/pkg/database"
 	"social-network-server/pkg/models"
 	"social-network-server/service"
 	"strconv"
@@ -13,9 +12,7 @@ import (
 	"social-network-server/pkg/models/errs"
 
 	"strings"
-	"sync"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
@@ -23,20 +20,18 @@ import (
 // userConnections mapeia IDs de usuário para conexões WebSocket
 // Canais para enviar mensagens
 var (
-	userMessageConnections   map[int64]*websocket.Conn
-	messageQueue             = make(chan models.UserMessage, 100) // Buffer de 100 mensagens
-	connectionMessageMutexes sync.Map
+	userConnections map[int64]*websocket.Conn
+	messageQueue    = make(chan models.UserMessage, 100) // Buffer de 100 mensagens
+
 )
 
 func init() {
-	userMessageConnections = make(map[int64]*websocket.Conn)
+	userConnections = make(map[int64]*websocket.Conn)
 	go handleWebSocketMessages()
-
 }
 
 // Chat é um manipulador HTTP que lida com solicitações de chat.
 func Chat(c *gin.Context) {
-
 	userId, exists := c.Get("id")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in session"})
@@ -50,7 +45,7 @@ func Chat(c *gin.Context) {
 	}
 
 	username := c.Param("username")
-	partnerID, err := repo.MessageGetUserIDByUsername(username) // Supondo uma função no service
+	partnerID, err := repo.MessageGetUserIDByUsername(username) // Supondo uma função no services
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user ID"})
 		return
@@ -81,91 +76,57 @@ func sendMessage(message models.UserMessage) {
 
 // Função para lidar com as mensagens WebSocket
 func handleWebSocketMessages() {
-	const workerCount = 5
+	for {
+		// Aguarda mensagens no canal
+		message := <-messageQueue
 
-	for i := 0; i < workerCount; i++ {
-		go worker()
-	}
-}
-
-func worker() {
-	for message := range messageQueue {
-		destConn, ok := userMessageConnections[int64(message.MessageTo)]
+		// Verifique se o destinatário está conectado
+		destConn, ok := userConnections[int64(message.MessageTo)]
 		if !ok {
 			log.Println("Recipient is not connected")
 			continue
 		}
-		err := destConn.WriteJSON(message)
 
+		// Envie a mensagem para o destinatário
+		err := destConn.WriteJSON(message) // Use WriteJSON para enviar mensagens JSON via WebSocket
 		if err != nil {
-			log.Println("Error sending message: ", err)
+			log.Println("Error sending message:", err)
+			continue
 		}
-
 	}
 }
 
 // WebSocketHandler é um manipulador HTTP para a rota WebSocket.
 func WebSocketHandler(c *gin.Context) {
-
-	cookie, errCookie := c.Request.Cookie("token")
-
-	if errCookie != nil {
-		log.Println("Cookie do tokeb não encontrado")
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Cookie do token não foi encontrado"})
-		return
-	}
-	tokenString := cookie.Value
 	userId, exists := c.Get("id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in session"})
+		log.Println("ID do usuário não encontrado na sessão")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário não encontrado na sessão"})
 		return
 	}
 
-	id, err := strconv.Atoi(fmt.Sprintf("%v", userId))
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
-		return
-	}
-
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Método de assinatura inesperado: %v", token.Header["alg"])
-		}
-		return []byte("your_secret_key"), nil
-	})
-
-	if err != nil || !token.Valid {
-		log.Println("Token JWT inválido:", err)
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token JWT inválido"})
-		return
-	}
-
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok || !token.Valid {
-		log.Println("Token JWT inválido")
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token JWT inválido"})
-		return
-	}
-
-	id, ok = claims["id"].(int)
+	var id int
+	idFloat, ok := userId.(float64)
 	if !ok {
-		log.Println("ID do usuário não encontrado no token")
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário não encontrado no token"})
+		id = int(idFloat)
+		return
+	} else {
+		log.Println("ID do usuário não encontrado no token ou erro de conversão")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário inválido"})
 		return
 	}
 
-	// Atualizar a conexão para WebSocket
-	ws, err := websocket.Upgrade(c.Writer, c.Request, nil, 4096, 4096)
+	ws, err := websocket.Upgrade(c.Writer, c.Request, nil, 1024, 1024)
 	if err != nil {
 		log.Println("Erro ao atualizar para WebSocket:", err)
 		return
 	}
 	defer ws.Close()
 
-	// Registre a conexão com o usuário
-	userMessageConnections[int64(id)] = ws
+	// Registrar a conexão com o ID convertido corretamente
+	userConnections[int64(id)] = ws
+	log.Println("Conexão WebSocket registrada para o usuário:", id)
 
-	// Aguardar mensagens do usuário
 	HandleMessages(ws)
 }
 
@@ -175,22 +136,21 @@ func HandleMessages(ws *websocket.Conn) {
 
 	for {
 		var msg models.UserMessage
-		err := ws.ReadJSON(&msg) // Use ReadJSON para ler mensagens JSON do WebSocket
+		err := ws.ReadJSON(&msg)
 		if err != nil {
 			log.Println("Error receiving message:", err)
 			return
+
 		}
 
-		// Envie a mensagem para o canal
 		go sendMessage(msg)
 	}
 }
 
 func CreateNewMessage(c *gin.Context) {
-	var userMessage models.UserMessage
 	var errResp errs.ErrorResponse
 
-	// Parse form data
+	// Parse do corpo da requisição
 	if err := c.Request.ParseForm(); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -205,57 +165,32 @@ func CreateNewMessage(c *gin.Context) {
 		return
 	}
 
-	id, errId := strconv.Atoi(fmt.Sprintf("%v", userId))
-	if errId != nil {
-		log.Println("Erro ao converter ID do usuário para int:", errId)
+	id, err := strconv.Atoi(fmt.Sprintf("%v", userId))
+	if err != nil {
+		log.Println("Erro ao converter ID do usuário para int:", err)
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário inválido"})
-		c.Abort()
 		return
 	}
 
+	// Validação básica
 	if content == "" {
 		errResp.Error["content"] = "Values are missing!"
 	}
-
 	if len(errResp.Error) > 0 {
 		c.JSON(http.StatusBadRequest, errResp)
 		return
 	}
 
-	userMessage.Content = content
-
-	db := database.GetDB()
-
-	var userID int
-	err := db.QueryRow("SELECT id FROM user WHERE username = ?", username).Scan(&userID)
+	// Chama o service para enviar a mensagem
+	messageID, err := service.SendMessage(id, username, content)
 	if err != nil {
-		log.Println("Failed to query user ID", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user ID"})
+		log.Println("Erro ao enviar mensagem:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send message"})
 		return
 	}
-
-	userMessage.MessageBy = id
-	userMessage.MessageTo = userID
-
-	stmt, err := db.Prepare("INSERT INTO user_message(content, messageBy, messageTo, created_at) VALUES (?, ?, ?, NOW())")
-	if err != nil {
-		log.Println("Error preparing SQL statement:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to prepare statement"})
-		return
-	}
-	defer stmt.Close()
-
-	rs, err := stmt.Exec(userMessage.Content, userMessage.MessageBy, userMessage.MessageTo)
-	if err != nil {
-		log.Println("Error executing SQL statement:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to execute statement"})
-		return
-	}
-
-	insertID, _ := rs.LastInsertId()
 
 	resp := map[string]interface{}{
-		"messageID": insertID,
+		"messageID": messageID,
 		"message":   "Message sent successfully",
 	}
 

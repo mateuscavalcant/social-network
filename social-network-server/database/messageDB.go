@@ -69,7 +69,7 @@ func GetUserInfo(userID int) (string, string, []byte, error) {
 	return name, username, icon, nil
 }
 
-// Salvar nova mensagem
+// SaveMessage salva uma nova mensagem no banco de dados
 func SaveMessage(message models.UserMessage) (int64, error) {
 	db := database.GetDB()
 	stmt, err := db.Prepare("INSERT INTO user_message(content, messageBy, messageTo, created_at) VALUES (?, ?, ?, NOW())")

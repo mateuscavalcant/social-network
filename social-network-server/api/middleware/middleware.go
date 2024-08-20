@@ -15,24 +15,32 @@ import (
 // AuthMiddleware é um middleware para verificar se o token JWT é válido e relacionado a um usuário autenticado.
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Obtenha o token JWT do cabeçalho de autorização
+		var tokenString string
+
+		// Verifica se o token estar no cabeçalho Authorization
 		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
+		if authHeader != "" {
+			// O token deve estar no formato "Bearer {token}"
+			tokenParts := strings.Split(authHeader, " ")
+			if len(tokenParts) == 2 && tokenParts[0] == "Bearer" {
+				tokenString = tokenParts[1]
+			}
+		}
+
+		// Se o token não foi encontrado no cabeçalho, tente obter do cookie
+		if tokenString == "" {
+			cookieToken, err := c.Cookie("token")
+			if err == nil {
+				tokenString = cookieToken
+			}
+		}
+
+		// Se nenhum token foi encontrado, retorne erro
+		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token não fornecido"})
 			c.Abort()
 			return
 		}
-
-		// O token deve estar no formato "Bearer {token}"
-		tokenParts := strings.Split(authHeader, " ")
-		if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Formato de token inválido"})
-			c.Abort()
-			return
-		}
-
-		// Extrair o token JWT
-		tokenString := tokenParts[1]
 
 		// Parse e verifique o token JWT
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

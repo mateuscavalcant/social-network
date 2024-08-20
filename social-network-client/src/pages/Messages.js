@@ -12,11 +12,12 @@ const Messages = () => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
             setToken(storedToken);
-            loadPosts(storedToken);
+            document.cookie = `token=${storedToken}; path=/; Secure; SameSite=Strict`;
+            loadChats(storedToken);
         }
     }, []);
 
-    const loadPosts = useCallback(async () => {
+    const loadChats = useCallback(async () => {
         axios.post("http://localhost:8080/chats", {}, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -48,7 +49,7 @@ const Messages = () => {
     const setupWebSocket = useCallback(() => {
         if (!token) return;
 
-        const wsURL = `ws://localhost:8080/chats?token=${token}`;
+        const wsURL = `ws://localhost:8080/chats`;
         const ws = new WebSocket(wsURL);
 
         ws.onopen = () => {
@@ -63,20 +64,20 @@ const Messages = () => {
         ws.onclose = () => {
             console.log('WebSocket connection closed. Reconnecting...');
             setTimeout(setupWebSocket, 1000);
-            loadPosts();
+            loadChats();
         };
 
         return () => {
             ws.close();
         };
-    }, [loadPosts, token]);
+    }, [loadChats, token]);
 
     useEffect(() => {
         if (token) {
-            loadPosts();
+            loadChats();
             setupWebSocket();
         }
-    }, [loadPosts, token, setupWebSocket]);
+    }, [loadChats, token, setupWebSocket]);
 
 
     const HandleMessage = (username) => {
