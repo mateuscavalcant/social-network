@@ -1,21 +1,32 @@
 # social-network
-## Social network project developed with Go, MySQL and React.
 
-I began this project while studying relationships between tables in structured databases. I built a database in MySQL Workbench with the initial intention of it being a simple table structure for a social network. However, I decided to expand the project by adding a server.
+Iniciei este projeto enquanto estudava as relações entre tabelas em bancos de dados estruturados. Construí um banco de dados no MySQL Workbench com a intenção inicial de criar uma simples estrutura de tabelas para uma rede social. No entanto, decidi expandir o projeto adicionando um servidor monolítico.
 
-I chose the Go language to build the server because I was already familiar with it and knew it offered good performance in creating APIs. Specifically, I utilized the Gin framework in Go for its efficiency and ease of use in handling HTTP requests. During the project's development, I was able to grasp the practical concept of scalability provided by the Golang. As the application grew and new features were added, the server maintained its stable performance.
+Escolhi a linguagem Go para construir o servidor, pois já estava familiarizado com sua sintaxe e sabia que ela oferecia simplicidade e desempenho na criação de APIs. Utilizei o Gin Web Framework para a construção da API. Meu próximo passo foi adicionar uma interface para a rede social e integrá-la ao backend. Para a construção da interface, utilizei a biblioteca React.
+
+Durante o desenvolvimento do projeto, pude compreender melhor o funcionamento de um software na parte do servidor, da interface e como ele pode realizar a comunicação entre essas duas camadas.
+
+## Arquitetura da aplicação
+A Aplicação está dividida em três camadas que são:
+
+- Frontend (React): Interage com o usuário final e envia requisições HTTP para o backend.
+- Backend (Go): Recebe e processa as requisições do frontend, interage com o banco de dados e retorna os dados ou ações necessárias.
+- Banco de dados (MySQL): Armazena as informações da rede social, incluindo usuários, postagens, mensagens e follows.
+
+
+<img align="center" width="900px" src="imgs/diagrama.png">
 
 
 
-## Features
-- User registration and login
-- Password hashing
-- Session JWT authentication
-- Middleware for protecting non-authenticated routes
-- Creating text posts
-- Delete posts
-- Home page for posts
-- Profile page
-- Edit profile
-- Follow or Unfollow
-- Send messages to others users
+## Serviços
+- Cadastro e Login de usuários
+- Senhas criptografadas
+- Autenticação JWT
+- Middleware para proteção das rotas autenticadas
+- Criaçaão de postagens de texto
+- Feed de exibição dos posts dos usuários seguidos
+- Página de perfil que exibe o icon, nome, username, posts, número de posts etc
+- Edição do perfil
+- Seguir outros usários
+- Trocas de mensagens em tempo real
+
