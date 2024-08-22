@@ -2,36 +2,13 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.chat-bar-btn-container {
-  position: fixed;
-  display: flex;
-  align-items: center;
-  height: 73vh;
+header {
+  font-size: 15px;
+  font-weight: 600;
+  color: #000000;
 }
 
-.chat-vertical-bar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  padding: 70px;
-
-}
-
-.chat-vertical-bar button {
-  border: none;
-  background: none;
-  margin: 10px 0;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.chat-vertical-bar img {
-  width: 28px;
-  height: 28px;
-}
-
-.home-header {
+.chat-header {
   border: 1px solid #ccc;
   padding: 10px;
   width: 620px;
@@ -55,9 +32,18 @@ body {
   margin-left: 20px;
 }
 
+.header-home-screen .header-back {
+  color: #000000;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 18px;
+  margin-left: 60px;
+
+}
+
 .header-home-screen .profile-icon {
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   margin-right: -60px;
   position: absolute;
@@ -174,7 +160,7 @@ body {
 }
 
 
-.user-name p {
+.user-name-message p {
   font-size: small;
   margin: 0;
 }
@@ -232,4 +218,47 @@ body {
   font-size: 15px;
   transition: 0.4s ease;
   margin-left: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+  #messages-container {
+    width: 100%;
+    height: 100%;
+    margin-left: calc(50% - 310px);
+    left: 0;
+    right: 0;
+    margin-top: 66px;
+    margin-bottom: 90px;
+    margin-left: 0;
+  }
+
+  .chat-header {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    height: 45px;
+    margin-left: 0;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    z-index: 2;
+    margin-bottom: 10px;
+}
+
+.message-form-create {
+  width: 100%;
+  margin-left: 0;
+}
+
+  .post header {
+      flex-wrap: wrap;
+  }
+
+  .post .profile-icon {
+      margin-right: 0;
+      margin-bottom: 10px;
+  }
 }

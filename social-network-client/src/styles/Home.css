@@ -11,7 +11,6 @@
     align-items: center;
     padding: 50px;
     margin: auto;
-
 }
 
 .vertical-bar button {
@@ -27,24 +26,46 @@
     height: 24px;
 }
 
-
+header {
+    display: flex;
+  }
+  
+  .page-header p {
+    font-size: medium;
+    margin: 0;
+    margin-left: 10px;
+  }
+  
 
 .home-container {
-
     position: relative;
     max-width: 600px;
     margin: 0 auto;
     margin-left: 190px;
+    overflow: hidden;
+    
 }
 
+.home-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 578.5px;
+    height: 33px;
+    margin-right: auto;
+    margin-bottom: 10px;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.918);
+    font-size: medium;
+    z-index: 3;
+  }
 
-.create-post-container2 p {
-    margin-left: 15px;
-    font-size: larger;
-    font-weight: 600;
-}
-
-.create-post-container2 {
+.create-post-container {
+    margin-top: 55px;
     margin-bottom: 0;
     word-wrap: break-word;
     overflow: auto;
@@ -52,17 +73,6 @@
     align-items: flex-start;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
-    position: relative;
-    z-index: 1;
-}
-
-.create-post-container {
-    margin-bottom: 0;
-    word-wrap: break-word;
-    overflow: auto;
-    display: flex;
-    align-items: flex-start;
-    border: 1px solid #ccc;
     position: relative;
     z-index: 1;
 }
@@ -98,7 +108,6 @@
 }
 
 .create-post-container textarea::placeholder {
-
     font-weight: 500;
     font-size: 17px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -126,7 +135,6 @@
 }
 
 .post header {
-
     margin-bottom: 10px;
 }
 
@@ -138,13 +146,11 @@
 }
 
 .post .post-info {
-
     flex-direction: column;
 }
 
 .post-title {
     margin-left: 60px;
-
     margin-top: 10px;
 }
 
@@ -182,7 +188,6 @@
 
 .post .post-content {
     display: flex;
-
 }
 
 .post .post-content p {
@@ -218,15 +223,49 @@
     color: #888;
 }
 
+/* RESPONSIVIDADE */
+@media only screen and (max-width: 900px) {
+    .home-container {
+        margin-left: 0;
+    }
+
+    .bar-btn-container {
+        position: relative;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .vertical-bar {
+        padding: 20px;
+        margin: 0 auto;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .vertical-bar button {
+        padding: 5px;
+    }
+
+    .create-post-container {
+        margin-top: 30px;
+      }
+      
+}
+
 
 @media only screen and (max-width: 600px) {
     .home-container {
-        padding: 10px;
+        padding: 0;
+        margin-left: 0;
+        margin-top: -95%;
+        margin-bottom: 70px;
     }
 
-    .post {
-        padding: 10px;
-    }
+    .create-post-container {
+        margin-top: 30px;
+      }
+      
+
 
     .post header {
         flex-wrap: wrap;
@@ -250,4 +289,51 @@
     .post .user-username {
         margin-right: 0;
     }
+
+    .user-name p {
+        font-size: small;
+        margin: 0;
+        margin-left: 10px;
+    }
+
+    .bar-btn-container {
+        position: relative;
+        width: 100%;
+        padding: 0;
+    }
+
+    .vertical-bar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 10px;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background-color: #fff; /* Adicione uma cor de fundo, se necessário */
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Opcional: sombra para destacar a barra */
+        z-index: 100; /* Certifique-se de que a barra fique acima de outros conteúdos */
+      }
+      
+
+    .vertical-bar img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .create-post-container textarea {
+        font-size: 18px;
+    }
+
+    .create-post-container button {
+        padding: 8px 18px;
+        font-size: 14px;
+    }
+
+    .create-post-container {
+        margin-top: 30px;
+      }
+      
 }

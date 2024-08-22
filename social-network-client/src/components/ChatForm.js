@@ -1,21 +1,18 @@
-// src/components/ChatForm.js
-
+// src/components/MessageForm.js
 import React from 'react';
-import '../styles/Chat.css';
 
-const ChatForm = ({ content, onContentChange, onSubmit }) => {
+const MessageForm = ({ content, setContent, handleCreateMessage }) => {
   return (
-    <form className="chat-form" onSubmit={onSubmit}>
+    <form className="message-form-create" onSubmit={handleCreateMessage}>
       <input
         type="text"
+        placeholder="What's happening?"
         value={content}
-        onChange={(e) => onContentChange(e.target.value)}
-        className="chat-input"
-        placeholder="Type a message..."
+        onChange={(e) => setContent(e.target.value)}
       />
-      <button type="submit" className="chat-submit-btn">Send</button>
+      <button type="submit">Send</button>
     </form>
   );
 };
 
-export default ChatForm;
+export default MessageForm;

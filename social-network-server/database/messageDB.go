@@ -24,7 +24,7 @@ func MessageGetUserIDByUsername(username string) (int, error) {
 }
 
 // Obter mensagens entre usuários
-func GetUserMessages(user1ID, user2ID int) ([]models.UserMessage, error) {
+func GetUserMessages(user1ID, user2ID int, limit, offset int) ([]models.UserMessage, error) {
 	db := database.GetDB()
 	stmt, err := db.Prepare(`
 		SELECT user_message.message_id, user_message.messageBy, user_message.content,
@@ -33,14 +33,15 @@ func GetUserMessages(user1ID, user2ID int) ([]models.UserMessage, error) {
 		JOIN user ON user.id = user_message.messageBy
 		WHERE (user_message.messageBy = ? AND user_message.messageTo = ?) OR 
 		      (user_message.messageBy = ? AND user_message.messageTo = ?)
-		ORDER BY user_message.created_at ASC
+		ORDER BY user_message.created_at DESC
+		LIMIT ? OFFSET ?
 	`)
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare statement: %w", err)
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query(user1ID, user2ID, user2ID, user1ID)
+	rows, err := stmt.Query(user1ID, user2ID, user2ID, user1ID, limit, offset)
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute query: %w", err)
 	}
@@ -54,6 +55,12 @@ func GetUserMessages(user1ID, user2ID int) ([]models.UserMessage, error) {
 		}
 		messages = append(messages, message)
 	}
+
+	// Inverte a ordem das mensagens para exibir em ordem ascendente
+	for i, j := 0, len(messages)-1; i < j; i, j = i+1, j-1 {
+		messages[i], messages[j] = messages[j], messages[i]
+	}
+
 	return messages, nil
 }
 
@@ -84,4 +91,15 @@ func SaveMessage(message models.UserMessage) (int64, error) {
 	}
 
 	return result.LastInsertId()
+}
+
+func GetUsernameByID(userID int) (string, error) {
+	db := database.GetDB()
+	var username string
+	err := db.QueryRow("SELECT username FROM user WHERE id = ?", userID).Scan(&username)
+	if err != nil {
+		log.Println("Erro ao consultar username:", err)
+		return "", err
+	}
+	return username, nil
 }

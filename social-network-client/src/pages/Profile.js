@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/Profile.css';
-import { handleLogout, handleProfile } from '../components/utils';
+import VerticalNavBar from '../components/VerticalNavBar';
+import Post from '../components/Post';
 
-const Profile = () => {
-    const { username } = useParams();
-    // eslint-disable-next-line
-    const navigate = useNavigate();
+const useProfileData = (username) => {
     const [profile, setProfile] = useState(null);
     const [posts, setPosts] = useState([]);
     const [chatPartner, setChatPartner] = useState({ name: '', iconBase64: '' });
@@ -22,9 +20,7 @@ const Profile = () => {
 
     const loadProfile = (username, token) => {
         axios.post(`http://localhost:8080/profile/${username}`, {}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+            headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
                 setProfile(response.data.profile);
@@ -38,23 +34,37 @@ const Profile = () => {
             });
     };
 
+    return { profile, posts, chatPartner, isCurrentUser, loadProfile };
+};
+
+const Profile = () => {
+    const { username } = useParams();
+    const navigate = useNavigate();
+    const { profile, posts, chatPartner, isCurrentUser, loadProfile } = useProfileData(username);
+
     const handleFollow = (action) => {
         if (!username) {
             console.error("Username is missing");
             return;
         }
         const url = action === 'follow' ? 'http://localhost:8080/follow' : 'http://localhost:8080/unfollow';
-        axios.post(url, { username: username }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
+        axios.post(url, { username }, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         })
-            .then(response => {
-                loadProfile(username, localStorage.getItem('token'));
-                console.log(`${action}ed successfully:`, response);
-            })
+            .then(() => loadProfile(username, localStorage.getItem('token')))
             .catch(error => {
                 console.error(`Error ${action}ing user:`, error.response ? error.response.data : error.message);
+            });
+    };
+
+    const handleMessage = (username) => {
+        const token = localStorage.getItem('token');
+        axios.post(`http://localhost:8080/chat/${username}`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(() => navigate(`/chat/${username}`))
+            .catch(error => {
+                console.error("Failed to start chat:", error.response ? error.response.data : error.message);
             });
     };
 
@@ -62,76 +72,20 @@ const Profile = () => {
         return <div>Loading...</div>;
     }
 
-    const HandleMessage = (username) => {
-        const token = localStorage.getItem('token');
-        axios.post(`http://localhost:8080/chat/${username}`, {}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                window.location.replace(`chat/${username}`);
-            })
-            .catch(error => {
-                console.error("Failed to fetch Chat:", error.response ? error.response.data : error.message);  // Log detalhado de erro
-            });
-    };
-
-
     return (
         <div className="profile-page">
             <div className="bar-btn-container">
-                <div className="vertical-bar">
-                    <button id="home-btn">
-                        <img
-                            src="/images/home.png"
-                            alt="Home"
-                            onClick={() => window.location.replace('home')}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-                    <button id="profile-btn">
-                        <img
-                            src={isCurrentUser ? "/images/profile-solid.png" : "/images/profile.png"}
-                            alt="Profile"
-                            onClick={() => handleProfile(chatPartner.username)}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-                    <button id="search-btn">
-                        <img src="/images/search.png" alt="Search" />
-                    </button>
-                    <button id='envelope-btn'>
-                        <img
-                            src="/images/envelope.png"
-                            alt="Home"
-                            onClick={() => window.location.replace('chats')}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-                    <button id="configure-btn">
-                        <img src="/images/config.png" alt="Configure" />
-                    </button>
-                    <button id='logout-btn'>
-                        <img
-                            src="/images/logout.png"
-                            alt="Messages"
-                            onClick={() => handleLogout()}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-                </div>
+                <VerticalNavBar chatPartner={chatPartner} />
             </div>
             <div className="profile-container">
                 <div className="profile-header-container">
                     <img id="profile-icon" src={`data:image/jpeg;base64,${profile.iconbase64}`} className="user-icon" alt="Profile" />
-                    <div className="name">
+                    <div className="page-header">
                         <header>
                             <div className="user-name">
                                 <p>{profile.name}</p>
                             </div>
-                            {profile.followto && <p className='follow-you'>Follow you</p>}
-
+                            {profile.followto && <p className='follow-you'>Follows you</p>}
                         </header>
                     </div>
                     <main>
@@ -162,7 +116,6 @@ const Profile = () => {
                             <div className='profile-btn'>
                                 {!isCurrentUser && (
                                     <>
-
                                         <button
                                             id="follow-btn"
                                             onClick={() => handleFollow('follow')}
@@ -177,49 +130,24 @@ const Profile = () => {
                                         >
                                             Following
                                         </button>
-
                                         <button
                                             id="message-btn"
-                                            onClick={() => HandleMessage(profile.username)}
+                                            onClick={() => handleMessage(profile.username)}
                                         >
                                             Message
                                         </button>
                                     </>
                                 )}
-
                             </div>
-
                             <div className='items-profile'>
                                 <p className='item-1'>Posts</p>
                             </div>
-
                         </footer>
                     </main>
-
                 </div>
                 <div id="posts-container">
-                    {posts.map(post => (
-                        <div className="post" key={post.postID}>
-                            <header>
-                                <img src={`data:image/jpeg;base64,${post.iconbase64}`} alt="Profile" className="profile-icon" />
-                                <div className="post-title">
-                                    <div className="user-name-post">
-                                        <p className={`name-user${post.postID}`}>{post.createdbyname}</p>
-                                    </div>
-                                    <div className="user-username">
-                                        <p className={`username-user${post.postID}`}>@{post.createdby}</p>
-                                    </div>
-                                </div>
-                            </header>
-                            <main>
-                                <div className="post-content">
-                                    <p>{post.content}</p>
-                                </div>
-                            </main>
-                            <footer>
-
-                            </footer>
-                        </div>
+                    {posts.map((post) => (
+                        <Post key={post.postID} post={post} />
                     ))}
                 </div>
             </div>

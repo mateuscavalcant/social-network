@@ -6,12 +6,13 @@ import (
 	"log"
 	"social-network-server/database"
 	"social-network-server/pkg/models"
+
 	"time"
 )
 
 // Obter mensagens entre usuários e processá-las
 func GetChatMessages(user1ID, user2ID int) ([]models.UserMessage, error) {
-	messages, err := database.GetUserMessages(user1ID, user2ID)
+	messages, err := database.GetUserMessages(user1ID, user2ID, 30, 0)
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving messages: %w", err)
 	}
@@ -31,31 +32,6 @@ func GetChatMessages(user1ID, user2ID int) ([]models.UserMessage, error) {
 		}
 	}
 	return messages, nil
-}
-
-func SendMessage(senderID int, receiverUsername, content string) (int64, error) {
-	// Obtém o ID do usuário destinatário
-	receiverID, err := database.MessageGetUserIDByUsername(receiverUsername)
-	if err != nil {
-		log.Println("Erro ao obter ID do destinatário:", err)
-		return 0, nil
-	}
-
-	// Cria a mensagem
-	message := models.UserMessage{
-		MessageBy: senderID,
-		MessageTo: receiverID,
-		Content:   content,
-	}
-
-	// Salva a mensagem no banco de dados
-	messageID, err := database.SaveMessage(message)
-	if err != nil {
-		log.Println("Erro ao salvar a mensagem:", err)
-		return 0, nil
-	}
-
-	return messageID, nil
 }
 
 // Obter informações de parceiro de chat

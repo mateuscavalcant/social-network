@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	repo "social-network-server/database"
 	"social-network-server/pkg/models"
 	"social-network-server/service"
 	"strconv"
@@ -47,8 +48,15 @@ func FeedChats(c *gin.Context) {
 		return
 	}
 
+	currentUsername, err := repo.GetUsernameByID(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user Username"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"chats": chats,
+		"currentUsername": gin.H{"username": currentUsername},
+		"chats":           chats,
 	})
 }
 

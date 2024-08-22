@@ -34,6 +34,8 @@ func (us *UserServiceProfile) GetUserProfileAndPosts(username string, currentUse
 		return nil, nil, false, nil, err
 	}
 
+	profile.Posts = len(posts)
+
 	// Verificar se o usuário atual segue o usuário alvo
 	profile.FollowBy, err = us.userRepo.IsFollowing(currentUserID, targetUserID)
 	if err != nil {

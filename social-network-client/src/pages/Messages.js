@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import '../styles/chats.css';
-import { handleLogout } from '../components/utils';
+import { usePosts } from '../hooks/usePosts';
+import { useNavigate } from 'react-router-dom';
+import VerticalNavBar from '../components/VerticalNavBar';
+
+
 
 const Messages = () => {
+    const navigate = useNavigate()
     const [chats, setChats] = useState([]);
-    const [chatPartner, setChatPartner] = useState({ name: '', iconBase64: '' });
+    const [currentUsername, setCurrentUsername] = useState({ username: '' });
     const [token, setToken] = useState('');
+    const { chatPartner} = usePosts(navigate);
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
@@ -25,26 +31,12 @@ const Messages = () => {
         })
             .then(response => {
                 setChats(response.data.chats);
-                setChatPartner(response.data.chatPartner || { name: '', iconBase64: '' });
+                setCurrentUsername(response.data.currentUsername || { username: '' });
             })
             .catch(error => {
                 console.error("Failed to load posts:", error.response ? error.response.data : error.message);
             });
     });
-
-    const handleProfile = (username) => {
-        axios.post(`http://localhost:8080/profile/${username}`, {}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                window.location.replace(`/${username}`);
-            })
-            .catch(error => {
-                console.error("Failed to fetch profile:", error.response ? error.response.data : error.message);
-            });
-    };
 
     const setupWebSocket = useCallback(() => {
         if (!token) return;
@@ -79,112 +71,72 @@ const Messages = () => {
         }
     }, [loadChats, token, setupWebSocket]);
 
-
-    const HandleMessage = (username) => {
+    const handleMessage = (username) => {
         const token = localStorage.getItem('token');
         axios.post(`http://localhost:8080/chat/${username}`, {}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+            headers: { Authorization: `Bearer ${token}` }
         })
-            .then(response => {
-                window.location.replace(`chat/${username}`);
-            })
+            .then(() => navigate(`/chat/${username}`))
             .catch(error => {
-                console.error("Failed to fetch Chat:", error.response ? error.response.data : error.message);  // Log detalhado de erro
+                console.error("Failed to start chat:", error.response ? error.response.data : error.message);
             });
     };
 
+
+
     return (
-        <div className='chats-page'>
+        <div className="home-page">
             <div className="bar-btn-container">
-                <div className="vertical-bar">
-                    <button id="home-btn">
-                        <img
-                            src="/images/home.png"
-                            alt="Home"
-                            onClick={() => window.location.replace('home')}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-                    <button id="profile-btn">
-                        <img
-                            src="/images/profile.png"
-                            alt="Profile"
-                            onClick={() => handleProfile(chatPartner.username)}
-
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-                    <button id="search-btn">
-                        <img src="/images/search.png" alt="Search" />
-                    </button>
-                    <button id='envelope-btn'>
-                        <img
-                            src="/images/envelope-solid.png"
-                            alt="Messages"
-                            onClick={() => window.location.replace('chats')}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-                    <button id="configure-btn">
-                        <img src="/images/config.png" alt="Configure" />
-                    </button>
-                    <button id='logout-btn'>
-                        <img
-                            src="/images/logout.png"
-                            alt="Messages"
-                            onClick={() => handleLogout()}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </button>
-
-                </div>
+                <VerticalNavBar chatPartner={chatPartner} />
             </div>
-            <div className="chats-container">
+            <div className="home-container">
+                <div className="home-page-header">
+                    <header>
+                    <p>Messages</p>
+                    </header>
+                </div>
                 <div id="chats-container">
-                    {chats.map(post => (
-                        <div className="chats" onClick={() => HandleMessage(post.createdby)}
-                            style={{ cursor: 'pointer' }} key={post.postID}>
-                            <header>
-                                {post.iconbase64 ? (
-                                    <img
-                                        src={`data:image/jpeg;base64,${post.iconbase64}`}
-                                        alt="Profile"
-                                        className="chats-icon"
-                                        onClick={() => HandleMessage(post.createdby)}
-                                        style={{ cursor: 'pointer' }}
-                                    />
-                                ) : (
-                                    <img
-                                        src="default-profile-icon.png"
-                                        alt="Profile"
-                                        className="chats-icon"
-                                        onClick={() => HandleMessage(post.createdby)}
-                                        style={{ cursor: 'pointer' }}
-                                    />
-                                )}
-                                <div className="chats-title">
-                                    <div className="chats-name" onClick={() => HandleMessage(post.createdby)} style={{ cursor: 'pointer' }}>
-                                        <p>{post.createdbyname}</p>
-                                    </div>
+                {chats.map((post) => (
+                        <div
+                        className="post"
+                        key={post.postID}
+                        onClick={() => handleMessage(post.createdby)}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        <header>
+                            {post.iconbase64 ? (
+                                <img
+                                    src={`data:image/jpeg;base64,${post.iconbase64}`}
+                                    alt="Profile"
+                                    className="profile-icon"
+                                    onClick={() => handleMessage(post.createdby)}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                            ) : (
+                                <img
+                                    src="default-profile-icon.png"
+                                    alt="Profile"
+                                    className="profile-icon"
+                                    onClick={() => handleMessage(post.createdby)}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                            )}
+                            <div className="post-title">
+                                <div className="user-name" onClick={() => handleMessage(post.createdby)} style={{ cursor: 'pointer' }}>
+                                    <p>{post.createdby}</p>
                                 </div>
-                            </header>
-                            <main>
-                                <div className="chats-main">
-                                    <div className="chats-content">
-                                        <p>{post.content}</p>
-                                    </div>
-                                </div>
-                                <div className="chats-links">
-                                </div>
-                            </main>
-                            <footer>
-                            </footer>
-                        </div>
+                            </div>
+                        </header>
+                        <main>
+                            <div className="post-content">
+                                <p>{post.content}</p>
+                            </div>
+                        </main>
+                    </div>
                     ))}
-                </div>
-            </div>
+
+                    </div>
+              </div>
         </div>
     );
 

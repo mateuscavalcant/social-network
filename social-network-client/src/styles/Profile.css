@@ -37,7 +37,7 @@ header {
   display: flex;
 }
 
-.name .user-name p {
+.page-header .user-name p {
   font-size: medium;
   margin: 0;
 }
@@ -57,7 +57,7 @@ header {
 }
 
 
-.name {
+.page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -77,12 +77,13 @@ header {
 }
 
 .profile-header-container {
-  border: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
   position: relative;
   padding: 10px;
   height: 432px;
   width: 578.5px;
-  ;
   margin-top: 30px;
   margin-right: auto;
   word-wrap: break-word;
@@ -155,15 +156,15 @@ header {
 .create-btn {
   display: flex;
   justify-content: flex-end;
-  margin-top: -200px;
-  margin-right: 90px;
+  margin-top: -190px;
+  margin-right: 200px;
 }
 
 .user-followby,
 .user-followto,
 .posts-count {
   right: auto;
-  margin-left: 60px;
+  margin-left: 15px;
   font-weight: bold;
   font-size: 15px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -453,39 +454,244 @@ header {
 }
 
 
-@media only screen and (max-width: 600px) {
+.post {
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  margin-bottom: 0;
+  padding: 15px;
+  background-color: #f9f9f9;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.post header {
+  margin-bottom: 10px;
+}
+
+.post .profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.post .post-info {
+  flex-direction: column;
+}
+
+.post-title {
+  margin-left: 60px;
+  margin-top: 10px;
+}
+
+.post .user-details {
+  display: flex;
+  align-items: center;
+  font-size: medium;
+}
+
+.post .user-name {
+  display: flex;
+  align-items: center;
+  margin-right: 4px;
+  margin-left: -60px;
+  margin-top: -39px;
+  color: #000000;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.post .user-username {
+  display: flex;
+  align-items: center;
+  color: #6f6f6f;
+  font-weight: normal;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 15px;
+}
+
+.post main {
+  margin-bottom: 10px;
+}
+
+.post .post-content {
+  display: flex;
+}
+
+.post .post-content p {
+  color: #3d3d3d;
+  margin-top: 10px;
+  font-weight: normal;
+  font-size: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 100%;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.post .post-links {
+  display: flex;
+  align-items: center;
+}
+
+.post .post-links img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.post .like-button {
+  cursor: pointer;
+}
+
+.post footer {
+  font-size: 12px;
+  color: #888;
+}
+
+.create-post-container {
+  margin-top: 30px;
+}
+
+/* RESPONSIVIDADE */
+@media only screen and (max-width: 900px) {
   .home-container {
-    padding: 10px;
+      margin-left: 0;
+      padding: 10px;
   }
 
-  .profile-container {
+  .bar-btn-container {
+      position: relative;
+      justify-content: center;
+      width: 100%;
+  }
+
+  .vertical-bar {
+      padding: 20px;
+      margin: 0 auto;
+      flex-direction: row;
+      justify-content: space-around;
+  }
+
+  .vertical-bar button {
+      padding: 5px;
+  }
+
+  .user-icon {
+    overflow: hidden;
+    margin-top: 90px;
+    margin-left: -75%;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+}
+
+.create-btn {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -190px;
+  margin-right: 40%;
+}
+
+.profile-btn {
+  margin-right: 40%;
+  margin-top: -10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+  .profile-header-container{
+    
+    border-left: none;
+    border-right: none;
     padding: 10px;
+    margin-top: 12%;
+}
+}
+
+@media only screen and (max-width: 600px) {
+  .profile-container {
+      margin-left: 0;
   }
 
   .post {
-    padding: 10px;
+      padding: 10px;
   }
 
   .post header {
-    flex-wrap: wrap;
+      flex-wrap: wrap;
   }
 
   .post .profile-icon {
-    margin-right: 0;
-    margin-bottom: 10px;
+      margin-right: 0;
+      margin-bottom: 10px;
   }
 
   .post .post-links img {
-    width: 18px;
-    height: 18px;
+      width: 18px;
+      height: 18px;
   }
 
   .post .user-details {
-    flex-wrap: wrap;
+      flex-wrap: wrap;
   }
 
   .post .user-name,
   .post .user-username {
-    margin-right: 0;
+      margin-right: 0;
+  }
+
+  .name .user-name p {
+  font-size: medium;
+  margin: 0;
+  margin-left: 10px;
+} 
+
+  .bar-btn-container {
+      position: relative;
+      width: 100%;
+      padding: 0;
+  }
+
+  .vertical-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #fff; /* Adicione uma cor de fundo, se necessário */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Opcional: sombra para destacar a barra */
+    z-index: 100; /* Certifique-se de que a barra fique acima de outros conteúdos */
+  }
+  
+
+  .vertical-bar img {
+      width: 20px;
+      height: 20px;
+  }
+
+ 
+    .profile-container {
+        font-size: 18px;
+        margin-top: -440px;
+        margin-bottom: 70px;
+    }
+
+
+  .create-post-container button {
+      padding: 8px 18px;
+      font-size: 14px;
+  }
+
+  .create-post-container {
+    margin-top: 30px;
   }
 }

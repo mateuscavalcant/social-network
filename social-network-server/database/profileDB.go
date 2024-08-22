@@ -63,6 +63,7 @@ func (ur *UserRepository) GetUserProfile(userID int) (*models.UserProfile, error
 		log.Println("Erro ao consultar perfil do usuário:", err)
 		return nil, err
 	}
+
 	return &user, nil
 }
 
