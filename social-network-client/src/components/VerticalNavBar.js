@@ -1,6 +1,6 @@
 // src/components/VerticalNavBar.js
 import React from 'react';
-import { handleLogout, handleProfile } from './utils';
+import {handleProfile } from './utils';
 import { useNavigate } from 'react-router-dom';
 
 const VerticalNavBar = ({ chatPartner }) => {
@@ -34,15 +34,11 @@ const VerticalNavBar = ({ chatPartner }) => {
                 />
             </button>
             <button id="configure-btn">
-                <img src="/images/config.png" alt="Configure" />
-            </button>
-            <button id='logout-btn'>
-                <img
-                    src="/images/logout.png"
-                    alt="Logout"
-                    onClick={() => handleLogout()}
-                    style={{ cursor: 'pointer' }}
-                />
+                <img 
+                src="/images/config.png" 
+                alt="Configure" 
+                onClick={() => navigate('/settings/account')}
+                style={{ cursor: 'pointer' }}/>
             </button>
         </div>
     );

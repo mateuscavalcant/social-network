@@ -19,12 +19,14 @@ const ChatMessages = () => {
       <div className="chat-header">
         <header>
         <div className="header-back">
-              <p
+              <img
+              src="/images/arrow-back.png"
+              alt='back'
                 onClick={() => navigate('/chats')}
                 style={{ cursor: 'pointer' }}
               >
-                back
-              </p>
+                
+              </img>
             </div>
           <div className="header-home-screen">
             {chatPartner.iconBase64 && (

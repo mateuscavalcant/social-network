@@ -667,9 +667,9 @@ header {
     position: fixed;
     bottom: 0;
     left: 0;
-    background-color: #fff; /* Adicione uma cor de fundo, se necessário */
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Opcional: sombra para destacar a barra */
-    z-index: 100; /* Certifique-se de que a barra fique acima de outros conteúdos */
+    background-color: #fff; 
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); 
+    z-index: 100; 
   }
   
 

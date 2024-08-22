@@ -7,6 +7,7 @@ import LoginForm from './pages/Login';
 import SignupForm from './pages/Signup';
 import Messages from './pages/Messages';
 import ChatMessages from './pages/ChatMessages';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/settings/account" element={<Settings />} />
           <Route path="/:username" element={<Profile />} />
           <Route path="/chat/:username" element={<ChatMessages />} />
           <Route path="/chats" element={<Messages />} />

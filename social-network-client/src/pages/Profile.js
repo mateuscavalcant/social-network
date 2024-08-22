@@ -139,9 +139,6 @@ const Profile = () => {
                                     </>
                                 )}
                             </div>
-                            <div className='items-profile'>
-                                <p className='item-1'>Posts</p>
-                            </div>
                         </footer>
                     </main>
                 </div>
