@@ -8,13 +8,16 @@
 }
 
 .form {
-    position: absolute;
-    max-width: 430px;
+    justify-content: center;
+    position: fixed;
+    margin-left: -30px;
+    max-width: 270px;
     width: 100%;
     padding: 30px;
     border-radius: 15px;
     background: #ffffff;
     text-align: center;
+
 }
 
 header {
@@ -81,4 +84,24 @@ header {
 
 .form-link a:hover {
     text-decoration: underline;
+}
+
+
+.form #edit-profile-icon {
+    height: 125px;
+    width: 125px;
+    border-radius: 50%;
+    margin-left: 75px;
+}
+
+input #icon.icon {
+    justify-content: center;
+    position: fixed;
+    margin-left: -30px;
+    max-width: 270px;
+    width: 100%;
+    padding: 30px;
+    border-radius: 15px;
+    background: #ffffff;
+    text-align: center;
 }

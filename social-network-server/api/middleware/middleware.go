@@ -78,7 +78,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		userID, ok := claims["id"]
 		if !ok {
 			log.Println("Erro ao converter ID do usuário para int")
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário inválido"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
 			c.Abort()
 			return
 		}
@@ -87,7 +87,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		idInt, err := strconv.Atoi(fmt.Sprintf("%v", userID))
 		if err != nil {
 			log.Println("Erro ao converter ID do usuário para int:", err)
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário inválido"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
 			c.Abort()
 			return
 		}

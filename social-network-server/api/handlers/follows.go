@@ -12,23 +12,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Follow handles the logic for a user to follow another user.
+// Follow lida com a lógica para um usuário seguir outro usuário.
 func Follow(c *gin.Context) {
 
 	var userfollow models.UserFollow
 	var requestBody map[string]string
 
-	// Decode the request body to get the username
+	// Decodifica o corpo da solicitação para obter o nome de usuário
 	if err := c.BindJSON(&requestBody); err != nil {
-		log.Println("Failed to bind request body:", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		log.Println("Falha ao decodificar o corpo da solicitação:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Corpo da solicitação inválido"})
 		return
 	}
 
 	username, exists := requestBody["username"]
 	if !exists || username == "" {
-		log.Println("Username is empty")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Username is required"})
+		log.Println("Nome de usuário está vazio")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Nome de usuário é obrigatório"})
 		return
 	}
 
@@ -52,41 +52,41 @@ func Follow(c *gin.Context) {
 	var userID int
 	err := db.QueryRow("SELECT id FROM user WHERE username = ?", username).Scan(&userID)
 	if err == sql.ErrNoRows {
-		log.Println("User not found:", username)
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		log.Println("Usuário não encontrado:", username)
+		c.JSON(http.StatusNotFound, gin.H{"error": "Usuário não encontrado"})
 		return
 	} else if err != nil {
-		log.Println("Failed to query user ID:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user ID"})
+		log.Println("Falha ao consultar ID do usuário:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Falha ao obter ID do usuário"})
 		return
 	}
 
 	userfollow.FollowBy = id
 	userfollow.FolloTo = userID
 
-	// Prepare an SQL statement to insert a new entry into the user_follow table
+	// Prepara uma instrução SQL para inserir uma nova entrada na tabela user_follow
 	stmt, err := db.Prepare("INSERT INTO user_follow(followBy, followTo) VALUES(?, ?)")
 	if err != nil {
-		log.Println("Failed to prepare statement", err)
+		log.Println("Falha ao preparar instrução", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to prepare statement",
+			"error": "Falha ao preparar instrução",
 		})
 		return
 	}
 
-	// Execute the SQL statement to insert the follow relationship
+	// Executa a instrução SQL para inserir o relacionamento de seguimento
 	_, err = stmt.Exec(userfollow.FollowBy, userfollow.FolloTo)
 	if err != nil {
-		log.Println("Failed to execute query", err)
+		log.Println("Falha ao executar consulta", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to execute query",
+			"error": "Falha ao executar consulta",
 		})
 		return
 	}
 
-	// Respond with a JSON message indicating the successful follow action
+	// Responde com uma mensagem JSON indicando a ação de seguir com sucesso
 	resp := map[string]interface{}{
-		"mssg": "Followed ",
+		"mssg": "Seguindo ",
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -95,17 +95,17 @@ func Unfollow(c *gin.Context) {
 	var userUnfollow models.UserFollow
 	var requestBody map[string]string
 
-	// Decode the request body to get the username
+	// Decodifica o corpo da solicitação para obter o nome de usuário
 	if err := c.BindJSON(&requestBody); err != nil {
-		log.Println("Failed to bind request body:", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		log.Println("Falha ao decodificar o corpo da solicitação:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Corpo da solicitação inválido"})
 		return
 	}
 
 	username, exists := requestBody["username"]
 	if !exists || username == "" {
-		log.Println("Username is empty")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Username is required"})
+		log.Println("Nome de usuário está vazio")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Nome de usuário é obrigatório"})
 		return
 	}
 
@@ -129,12 +129,12 @@ func Unfollow(c *gin.Context) {
 	var userID int
 	err := db.QueryRow("SELECT id FROM user WHERE username = ?", username).Scan(&userID)
 	if err == sql.ErrNoRows {
-		log.Println("User not found:", username)
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		log.Println("Usuário não encontrado:", username)
+		c.JSON(http.StatusNotFound, gin.H{"error": "Usuário não encontrado"})
 		return
 	} else if err != nil {
-		log.Println("Failed to query user ID:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user ID"})
+		log.Println("Falha ao consultar ID do usuário:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Falha ao obter ID do usuário"})
 		return
 	}
 
@@ -143,20 +143,20 @@ func Unfollow(c *gin.Context) {
 
 	stmt, err := db.Prepare("DELETE FROM user_follow WHERE followBy=? AND followTo=?")
 	if err != nil {
-		log.Println("Failed to prepare statement", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to prepare statement"})
+		log.Println("Falha ao preparar instrução", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Falha ao preparar instrução"})
 		return
 	}
 
 	_, err = stmt.Exec(userUnfollow.FollowBy, userUnfollow.FolloTo)
 	if err != nil {
-		log.Println("Failed to execute query", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to execute query"})
+		log.Println("Falha ao executar consulta", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Falha ao executar consulta"})
 		return
 	}
 
 	resp := map[string]interface{}{
-		"mssg": "Unfollowed",
+		"mssg": "Deixou de seguir",
 	}
 	c.JSON(http.StatusOK, resp)
 }

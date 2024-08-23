@@ -16,6 +16,15 @@ export const handleProfile = (username, token) => {
     });
 };
 
+
+export const handleEditProfile = (token) => {
+    token = localStorage.getItem('token');
+   if (!token) return;
+
+   window.location.replace(`/editprofile`);
+
+
+};
 // Função para lidar com logout
 export const handleLogout = () => {
     try {

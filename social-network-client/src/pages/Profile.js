@@ -1,46 +1,18 @@
-import React, { useState, useEffect } from 'react';
+
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/Profile.css';
 import VerticalNavBar from '../components/VerticalNavBar';
 import Post from '../components/Post';
+import { handleEditProfile } from '../components/utils';
+import useProfile from '../hooks/useProfile';
 
-const useProfileData = (username) => {
-    const [profile, setProfile] = useState(null);
-    const [posts, setPosts] = useState([]);
-    const [chatPartner, setChatPartner] = useState({ name: '', iconBase64: '' });
-    const [isCurrentUser, setIsCurrentUser] = useState(false);
 
-    useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        if (storedToken) {
-            loadProfile(username, storedToken);
-        }
-    }, [username]);
-
-    const loadProfile = (username, token) => {
-        axios.post(`http://localhost:8080/profile/${username}`, {}, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(response => {
-                setProfile(response.data.profile);
-                setIsCurrentUser(response.data.isCurrentUser);
-                document.title = `${response.data.profile.name} / (@${response.data.profile.username})`;
-                setPosts(response.data.posts);
-                setChatPartner(response.data.chatPartner || { name: '', iconBase64: '' });
-            })
-            .catch(error => {
-                console.error("Failed to fetch profile:", error.response ? error.response.data : error.message);
-            });
-    };
-
-    return { profile, posts, chatPartner, isCurrentUser, loadProfile };
-};
 
 const Profile = () => {
     const { username } = useParams();
     const navigate = useNavigate();
-    const { profile, posts, chatPartner, isCurrentUser, loadProfile } = useProfileData(username);
+    const { profile, posts, chatPartner, isCurrentUser, loadProfile } = useProfile(username);
 
     const handleFollow = (action) => {
         if (!username) {
@@ -111,7 +83,10 @@ const Profile = () => {
                         </div>
                         <footer>
                             {isCurrentUser && (
-                                <button id="edit-profile-btn">Edit Profile</button>
+                                <button id="edit-profile-btn"
+                                onClick={handleEditProfile}
+                                style={{ cursor: 'pointer' }}>Edit Profile
+                                </button>
                             )}
                             <div className='profile-btn'>
                                 {!isCurrentUser && (

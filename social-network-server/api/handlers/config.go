@@ -16,28 +16,28 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// DeleteAccount handles the logic for deleting a user account.
+// DeleteAccount lida com a lógica para excluir uma conta de usuário.
 func DeleteAccount(c *gin.Context) {
 	var user models.User
 
-	// Retrieve the current user's ID from the session
+	// Recupera o ID do usuário atual a partir da sessão
 	idInterface, _ := utils.AllSessions(c)
 
-	// Convert the user ID to an integer
+	// Converte o ID do usuário para um inteiro
 	id, _ := strconv.Atoi(idInterface.(string))
 	user.ID = id
 
-	// Retrieve the identifier (either email or username) and password from the request
+	// Recupera o identificador (seja e-mail ou nome de usuário) e a senha da solicitação
 	identifier := strings.TrimSpace(c.PostForm("identifier"))
 	password := strings.TrimSpace(c.PostForm("password"))
 	confirmPassword := strings.TrimSpace(c.PostForm("confirm_password"))
 
-	// Initialize an ErrorResponse object to hold error messages
+	// Inicializa um objeto ErrorResponse para armazenar mensagens de erro
 	resp := errs.ErrorResponse{
 		Error: make(map[string]string),
 	}
 
-	// Determine whether the identifier is an email or username
+	// Determina se o identificador é um e-mail ou nome de usuário
 	isEmail := strings.Contains(identifier, "@")
 	var queryField string
 	if isEmail {
@@ -46,62 +46,62 @@ func DeleteAccount(c *gin.Context) {
 		queryField = "username"
 	}
 
-	// Get a database connection
+	// Obtém uma conexão com o banco de dados
 	db := database.GetDB()
 
-	// Prepare a query to retrieve user data based on the identifier
+	// Prepara uma consulta para recuperar os dados do usuário com base no identificador
 	stmt, err := db.Prepare("SELECT id, email, password FROM user WHERE " + queryField + " = ?")
 	if err != nil {
-		log.Println("Error preparing query:", err)
-		resp.Error["credentials"] = "Invalid credentials"
+		log.Println("Erro ao preparar consulta:", err)
+		resp.Error["credentials"] = "Credenciais inválidas"
 		c.JSON(400, resp)
 		return
 	}
 	defer stmt.Close()
 
-	// Execute the query to retrieve user data
+	// Executa a consulta para recuperar os dados do usuário
 	err = stmt.QueryRow(identifier).Scan(&user.ID, &user.Email, &user.Password)
 	if err != nil {
-		log.Println("Error retrieving user data:", err)
-		resp.Error["credentials"] = "Invalid credentials"
+		log.Println("Erro ao recuperar dados do usuário:", err)
+		resp.Error["credentials"] = "Credenciais inválidas"
 		c.JSON(400, resp)
 		return
 	}
 
-	// Compare the provided password with the hashed password stored in the database
+	// Compara a senha fornecida com a senha criptografada armazenada no banco de dados
 	encErr := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if encErr != nil {
-		resp.Error["password"] = "Invalid password"
+		resp.Error["password"] = "Senha inválida"
 		c.JSON(400, resp)
 		return
 	}
 
-	// Check if the password and confirm password match
+	// Verifica se a senha e a confirmação da senha correspondem
 	if password != confirmPassword {
-		resp.Error["confirm_password"] = "Passwords don't match"
+		resp.Error["confirm_password"] = "As senhas não coincidem"
 		c.JSON(400, resp)
 		return
 	}
 
-	// Prepare a query to delete the user account from the database
+	// Prepara uma consulta para excluir a conta do usuário do banco de dados
 	stmt, err = db.Prepare("DELETE FROM user WHERE " + queryField + " = ?")
 	if err != nil {
-		log.Println("Error preparing query:", err)
-		resp.Error["delete"] = "Failed to delete user"
+		log.Println("Erro ao preparar consulta:", err)
+		resp.Error["delete"] = "Falha ao excluir usuário"
 		c.JSON(500, resp)
 		return
 	}
 	defer stmt.Close()
 
-	// Execute the query to delete the user account
+	// Executa a consulta para excluir a conta do usuário
 	_, deleteErr := stmt.Exec(identifier)
 	if deleteErr != nil {
-		log.Println("Error deleting user:", deleteErr)
-		resp.Error["delete"] = "Failed to delete user"
+		log.Println("Erro ao excluir usuário:", deleteErr)
+		resp.Error["delete"] = "Falha ao excluir usuário"
 		c.JSON(500, resp)
 		return
 	}
 
-	// Respond with a success message if the user account deletion is successful
-	c.JSON(200, gin.H{"message": "User deleted successfully"})
+	// Responde com uma mensagem de sucesso se a exclusão da conta do usuário for bem-sucedida
+	c.JSON(200, gin.H{"message": "Usuário excluído com sucesso"})
 }

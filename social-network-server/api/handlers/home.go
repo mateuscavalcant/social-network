@@ -17,13 +17,13 @@ func Feed(c *gin.Context) {
 	// Obter o ID do usuário da sessão JWT
 	userID, exists := c.Get("id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário não encontrado na sessão"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in session"})
 		return
 	}
 
 	id, err := strconv.Atoi(fmt.Sprintf("%v", userID))
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário inválido"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
@@ -57,13 +57,13 @@ func CreateNewPost(c *gin.Context) {
 	// Obter o ID do usuário da sessão JWT
 	userID, exists := c.Get("id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário não encontrado na sessão"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in session"})
 		return
 	}
 
 	id, err := strconv.Atoi(fmt.Sprintf("%v", userID))
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário inválido"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
@@ -97,8 +97,8 @@ func DeletePost(c *gin.Context) {
 	id, exists := c.Get("id")
 	if !exists {
 		// Lidar com o caso em que o ID do usuário não está disponível
-		log.Println("ID do usuário não encontrado na sessão")
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário não encontrado na sessão"})
+		log.Println("User ID not found in session")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in session"})
 		return
 	}
 

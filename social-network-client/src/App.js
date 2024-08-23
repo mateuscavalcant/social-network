@@ -8,6 +8,8 @@ import SignupForm from './pages/Signup';
 import Messages from './pages/Messages';
 import ChatMessages from './pages/ChatMessages';
 import Settings from './pages/Settings';
+import EditProfile from './pages/EditProfile';
+
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/home" element={<Home />} />
           <Route path="/settings/account" element={<Settings />} />
+          <Route path="/editprofile" element={< EditProfile/>} />
           <Route path="/:username" element={<Profile />} />
           <Route path="/chat/:username" element={<ChatMessages />} />
           <Route path="/chats" element={<Messages />} />

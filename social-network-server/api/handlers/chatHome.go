@@ -28,15 +28,15 @@ func init() {
 func FeedChats(c *gin.Context) {
 	userId, exists := c.Get("id")
 	if !exists {
-		log.Println("ID do usuário não encontrado na sessão")
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário não encontrado na sessão"})
+		log.Println("User ID not found in session")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in session"})
 		return
 	}
 
 	id, errId := strconv.Atoi(fmt.Sprintf("%v", userId))
 	if errId != nil {
 		log.Println("Erro ao converter ID do usuário para int:", errId)
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário inválido"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
 		c.Abort()
 		return
 	}
@@ -63,15 +63,15 @@ func FeedChats(c *gin.Context) {
 func WebSocketFeedChats(c *gin.Context) {
 	userId, exists := c.Get("id")
 	if !exists {
-		log.Println("ID do usuário não encontrado na sessão")
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário não encontrado na sessão"})
+		log.Println("User ID not found in session")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in session"})
 		return
 	}
 
 	id, errId := strconv.Atoi(fmt.Sprintf("%v", userId))
 	if errId != nil {
 		log.Println("Erro ao converter ID do usuário para int:", errId)
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "ID do usuário inválido"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
 		c.Abort()
 		return
 	}

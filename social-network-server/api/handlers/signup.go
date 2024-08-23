@@ -12,21 +12,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Signup handles user signup requests.
+// Signup lida com solicitações de inscrição do usuário.
 func Signup(c *gin.Context) {
 	var user models.User
 
-	// Extract form inputs from the request
+	// Extrair entradas de formulário da solicitação
 	user.Username = strings.TrimSpace(c.PostForm("username"))
 	user.Name = strings.TrimSpace(c.PostForm("name"))
 	user.Email = strings.TrimSpace(c.PostForm("email"))
 	user.Password = strings.TrimSpace(c.PostForm("password"))
 	user.ConfirmPassword = strings.TrimSpace(c.PostForm("confirm_password"))
 
-	// Default bio value for new users
 	user.Bio = "Your bio"
 
-	// Read default user icon file
 	fileBytes, err := ioutil.ReadFile("client/public/images/user-icon.jpg")
 	if err != nil {
 		log.Println("Error reading file:", err)
@@ -35,10 +33,10 @@ func Signup(c *gin.Context) {
 	}
 	user.Icon = fileBytes
 
-	// Connect to the database
+	// Conectando ao banco de dados
 	db := database.GetDB()
 
-	// Call the signup service
+	// Chamando o serviço signup
 	errors, err := service.SignupService(db, user)
 	if err != nil {
 		log.Println("Error in SignupService:", err)
@@ -51,6 +49,6 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	// Return success message
+	// Returnando mensagem de sucesso
 	c.JSON(http.StatusOK, gin.H{"message": "Successful signup"})
 }
