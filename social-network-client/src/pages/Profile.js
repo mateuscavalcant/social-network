@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import '../styles/Profile.css';
 import VerticalNavBar from '../components/VerticalNavBar';
 import Post from '../components/Post';
@@ -10,34 +10,8 @@ import useRedirectEditProfile from '../components/utils';
 const Profile = () => {
     const redirectEditProfile = useRedirectEditProfile()
     const { username } = useParams();
-    const navigate = useNavigate();
-    const { profile, posts, userInfos, isCurrentUser, loadProfile } = useProfile(username);
+    const { profile, posts, userInfos, isCurrentUser, handleFollow, handleMessage } = useProfile(username);
 
-    const handleFollow = (action) => {
-        if (!username) {
-            console.error("Username is missing");
-            return;
-        }
-        const url = action === 'follow' ? 'http://localhost:8080/follow' : 'http://localhost:8080/unfollow';
-        axios.post(url, { username }, {
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        })
-            .then(() => loadProfile(username, localStorage.getItem('token')))
-            .catch(error => {
-                console.error(`Error ${action}ing user:`, error.response ? error.response.data : error.message);
-            });
-    };
-
-    const handleMessage = (username) => {
-        const token = localStorage.getItem('token');
-        axios.post(`http://localhost:8080/chat/${username}`, {}, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(() => navigate(`/chat/${username}`))
-            .catch(error => {
-                console.error("Failed to start chat:", error.response ? error.response.data : error.message);
-            });
-    };
 
     if (!profile) {
         return <div>Loading...</div>;
