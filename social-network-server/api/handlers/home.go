@@ -44,7 +44,7 @@ func Feed(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"posts": posts,
-		"chatPartner": gin.H{
+		"userInfos": gin.H{
 			"username":   userDetails.Username,
 			"iconBase64": userDetails.IconBase64,
 		},

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../styles/loginForm.css';
 import { useNavigate } from 'react-router-dom';
 
+
 const SignupForm = () => {
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');

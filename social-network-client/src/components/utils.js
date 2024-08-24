@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // Função para lidar com perfil
 export const handleProfile = (username, token) => {
@@ -17,14 +18,6 @@ export const handleProfile = (username, token) => {
 };
 
 
-export const handleEditProfile = (token) => {
-    token = localStorage.getItem('token');
-   if (!token) return;
-
-   window.location.replace(`/editprofile`);
-
-
-};
 // Função para lidar com logout
 export const handleLogout = () => {
     try {
@@ -34,3 +27,19 @@ export const handleLogout = () => {
         console.error('Error during logout:', error);
     }
 };
+
+
+const useRedirectEditProfile = () => {
+    const navigate = useNavigate();
+
+    const handleEditProfile = () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        navigate('/settings/account/edit-profile');
+    };
+
+    return handleEditProfile;
+};
+
+export default useRedirectEditProfile;

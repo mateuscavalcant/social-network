@@ -32,7 +32,7 @@ func Profile(c *gin.Context) {
 	}
 
 	// Obter informações do perfil usando o serviço
-	profile, posts, isCurrentUser, chatPartner, err := userService.GetUserProfileAndPosts(username, id)
+	profile, posts, isCurrentUser, userInfos, err := userService.GetUserProfileAndPosts(username, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -43,7 +43,7 @@ func Profile(c *gin.Context) {
 		"posts":         posts,
 		"icon":          profile.IconBase64,
 		"isCurrentUser": isCurrentUser,
-		"chatPartner":   chatPartner,
+		"userInfos":   userInfos,
 	})
 }
 

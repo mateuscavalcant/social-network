@@ -6,7 +6,7 @@ export const useChatMessages = (username) => {
   const [messages, setMessages] = useState([]);
   const [content, setContent] = useState('');
   const [autoScroll, setAutoScroll] = useState(true);
-  const [chatPartner, setChatPartner] = useState({ name: '', iconBase64: '', username: '' });
+  const [userInfos, setuserInfos] = useState({ name: '', iconBase64: '', username: '' });
   const token = localStorage.getItem('token');
   const cookie = document.cookie = `token=${token}; path=/; Secure; SameSite=Strict`;
 
@@ -18,7 +18,7 @@ export const useChatMessages = (username) => {
         }
       });
       setMessages(response.data.messages || []);
-      setChatPartner(response.data.chatPartner || { name: '', iconBase64: '' });
+      setuserInfos(response.data.userInfos || { name: '', iconBase64: '' });
       
       if (autoScroll) {
         window.scrollTo(0, document.body.scrollHeight);
@@ -38,7 +38,7 @@ export const useChatMessages = (username) => {
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       setMessages(data.messages || []);
-      setChatPartner(data.chatPartner || { name: '', iconBase64: '' });
+      setuserInfos(data.userInfos || { name: '', iconBase64: '' });
 
     };
 
@@ -85,7 +85,7 @@ export const useChatMessages = (username) => {
     messages,
     content,
     setContent,
-    chatPartner,
+    userInfos,
     handleCreateMessage
   };
 };

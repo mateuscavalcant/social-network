@@ -35,7 +35,7 @@ func GetChatMessages(user1ID, user2ID int) ([]models.UserMessage, error) {
 }
 
 // Obter informações de parceiro de chat
-func GetChatPartnerInfo(userID int) (string, string, string, error) {
+func GetuserInfosInfo(userID int) (string, string, string, error) {
 	name, username, icon, err := database.GetUserInfo(userID)
 	if err != nil {
 		return "", "", "", fmt.Errorf("error retrieving chat partner info: %w", err)

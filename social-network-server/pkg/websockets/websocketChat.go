@@ -118,7 +118,7 @@ func Chat(c *gin.Context) {
 		return
 	}
 
-	chatPartnerName, chatPartnerUsername, chatPartnerIcon, err := service.GetChatPartnerInfo(partnerID)
+	userInfosName, userInfosUsername, userInfosIcon, err := service.GetuserInfosInfo(partnerID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve chat partner info"})
 		return
@@ -127,7 +127,7 @@ func Chat(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"currentUsername": currentUsername,
 		"messages":        messages,
-		"chatPartner":     gin.H{"name": chatPartnerName, "username": chatPartnerUsername, "iconBase64": chatPartnerIcon},
+		"userInfos":     gin.H{"name": userInfosName, "username": userInfosUsername, "iconBase64": userInfosIcon},
 	})
 }
 

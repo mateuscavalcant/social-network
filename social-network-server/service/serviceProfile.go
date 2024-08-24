@@ -58,11 +58,11 @@ func (us *UserServiceProfile) GetUserProfileAndPosts(username string, currentUse
 
 	// Obter ícone e nome do chat partner
 	userService := UserService{}
-	chatPartner, err := userService.GetUserIcon(currentUserID)
+	userInfos, err := userService.GetUserIcon(currentUserID)
 
 	if err != nil {
 		return nil, nil, false, nil, err
 	}
 
-	return profile, posts, isCurrentUser, chatPartner, nil
+	return profile, posts, isCurrentUser, userInfos, nil
 }

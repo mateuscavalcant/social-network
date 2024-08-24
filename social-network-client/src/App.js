@@ -22,7 +22,7 @@ function App() {
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/home" element={<Home />} />
           <Route path="/settings/account" element={<Settings />} />
-          <Route path="/editprofile" element={< EditProfile/>} />
+          <Route path="/settings/account/edit-profile" element={< EditProfile/>} />
           <Route path="/:username" element={<Profile />} />
           <Route path="/chat/:username" element={<ChatMessages />} />
           <Route path="/chats" element={<Messages />} />

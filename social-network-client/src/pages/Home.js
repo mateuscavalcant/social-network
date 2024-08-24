@@ -7,9 +7,10 @@ import CreatePostForm from '../components/CreatePostForm';
 import Post from '../components/Post';
 import '../styles/Home.css';
 
+
 const Home = () => {
     const navigate = useNavigate();
-    const { posts, content, setContent, chatPartner, handleCreatePost } = usePosts(navigate);
+    const { posts, content, setContent, userInfos, handleCreatePost } = usePosts(navigate);
 
     if (!posts) {
         return <div>Loading...</div>;
@@ -18,19 +19,19 @@ const Home = () => {
     return (
         <div className="home-page">
             <div className="bar-btn-container">
-                <VerticalNavBar chatPartner={chatPartner} />
+                <VerticalNavBar userInfos={userInfos} />
             </div>
             <div className="home-container">
                 <div className="home-page-header">
                     <header>
-                    <p>Home</p>
+                        <p>Home</p>
                     </header>
                 </div>
                 <CreatePostForm
                     content={content}
                     setContent={setContent}
                     handleCreatePost={handleCreatePost}
-                    chatPartner={chatPartner}
+                    userInfos={userInfos}
                 />
                 <div id="posts-container">
                     {posts.map((post) => (

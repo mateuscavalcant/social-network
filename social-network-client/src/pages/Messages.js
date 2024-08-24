@@ -12,7 +12,7 @@ const Messages = () => {
     const [chats, setChats] = useState([]);
     const [currentUsername, setCurrentUsername] = useState({ username: '' });
     const [token, setToken] = useState('');
-    const { chatPartner} = usePosts(navigate);
+    const { userInfos } = usePosts(navigate);
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
@@ -87,56 +87,56 @@ const Messages = () => {
     return (
         <div className="home-page">
             <div className="bar-btn-container">
-                <VerticalNavBar chatPartner={chatPartner} />
+                <VerticalNavBar userInfos={userInfos} />
             </div>
             <div className="home-container">
                 <div className="home-page-header">
                     <header>
-                    <p>Messages</p>
+                        <p>Messages</p>
                     </header>
                 </div>
                 <div id="chats-container">
-                {chats.map((post) => (
+                    {chats.map((post) => (
                         <div
-                        className="post"
-                        key={post.postID}
-                        onClick={() => handleMessage(post.createdby)}
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <header>
-                            {post.iconbase64 ? (
-                                <img
-                                    src={`data:image/jpeg;base64,${post.iconbase64}`}
-                                    alt="Profile"
-                                    className="profile-icon"
-                                    onClick={() => handleMessage(post.createdby)}
-                                    style={{ cursor: 'pointer' }}
-                                />
-                            ) : (
-                                <img
-                                    src="default-profile-icon.png"
-                                    alt="Profile"
-                                    className="profile-icon"
-                                    onClick={() => handleMessage(post.createdby)}
-                                    style={{ cursor: 'pointer' }}
-                                />
-                            )}
-                            <div className="post-title">
-                                <div className="user-name" onClick={() => handleMessage(post.createdby)} style={{ cursor: 'pointer' }}>
-                                    <p>{post.createdby}</p>
+                            className="post"
+                            key={post.postID}
+                            onClick={() => handleMessage(post.createdby)}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <header>
+                                {post.iconbase64 ? (
+                                    <img
+                                        src={`data:image/jpeg;base64,${post.iconbase64}`}
+                                        alt="Profile"
+                                        className="profile-icon"
+                                        onClick={() => handleMessage(post.createdby)}
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                ) : (
+                                    <img
+                                        src="default-profile-icon.png"
+                                        alt="Profile"
+                                        className="profile-icon"
+                                        onClick={() => handleMessage(post.createdby)}
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                )}
+                                <div className="post-title">
+                                    <div className="user-name" onClick={() => handleMessage(post.createdby)} style={{ cursor: 'pointer' }}>
+                                        <p>{post.createdby}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </header>
-                        <main>
-                            <div className="post-content">
-                                <p>{post.content}</p>
-                            </div>
-                        </main>
-                    </div>
+                            </header>
+                            <main>
+                                <div className="post-content">
+                                    <p>{post.content}</p>
+                                </div>
+                            </main>
+                        </div>
                     ))}
 
-                    </div>
-              </div>
+                </div>
+            </div>
         </div>
     );
 

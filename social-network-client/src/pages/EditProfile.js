@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/loginForm.css';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { usePosts } from '../hooks/usePosts';
 import { handleProfile } from '../components/utils';
 import imageCompression from 'browser-image-compression';
-import useProfile from '../hooks/useProfile';
+
 
 const EditProfile = () => {
     const navigate = useNavigate();
-    const { chatPartner } = usePosts(navigate);
-
-    const {profile} = useProfile(chatPartner)
+    const { userInfos } = usePosts(navigate);
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
     const [icon, setIcon] = useState(null);
@@ -20,24 +18,24 @@ const EditProfile = () => {
     const storedToken = localStorage.getItem('token');
 
     useEffect(() => {
-        if (chatPartner) {
-            setName(chatPartner.name);
-            
+        if (userInfos) {
+            setName(userInfos.name);
+
         }
-    }, [chatPartner]);
+    }, [userInfos]);
 
     useEffect(() => {
-        if (chatPartner.iconBase64) {
-            setIconPreview(`data:image/jpeg;base64,${chatPartner.iconBase64}`);
+        if (userInfos.iconBase64) {
+            setIconPreview(`data:image/jpeg;base64,${userInfos.iconBase64}`);
         }
-    }, [chatPartner.iconBase64]);
+    }, [userInfos.iconBase64]);
 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
             try {
                 const options = {
-                    maxSizeMB: 1, 
+                    maxSizeMB: 1,
                     maxWidthOrHeight: 1024,
                 };
                 const compressedFile = await imageCompression(file, options);
@@ -59,12 +57,12 @@ const EditProfile = () => {
 
         try {
             const response = await axios.post('http://localhost:8080/edit-profile', formData, {
-                headers: { 
+                headers: {
                     'Authorization': `Bearer ${storedToken}`,
-                    'Content-Type': 'multipart/form-data' 
+                    'Content-Type': 'multipart/form-data'
                 }
             });
-            
+
             if (response.data.error) {
                 setError(response.data.error.name || response.data.error.bio || response.data.error.icon);
             } else {
@@ -73,7 +71,7 @@ const EditProfile = () => {
                 setBio('');
                 setIcon(null);
                 setIconPreview(`data:image/jpeg;base64,${response.data.iconBase64}`);
-                handleProfile(chatPartner.username);
+                handleProfile(userInfos.username);
             }
         } catch (error) {
             console.error(error);
@@ -86,23 +84,26 @@ const EditProfile = () => {
             <div className="form">
                 <h2 className="header">Edit Profile</h2>
 
-                <header>
-                    <img 
-                        id="edit-profile-icon" 
-                        src={iconPreview || 'default-image-url'} 
-                        className="edit-profile-icon" 
-                        alt="Profile" 
-                    />
-                    <input
-                        type="file"
-                        className="icon"
-                        id="icon"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                    />
-                    <span id="error-icon" className="error-message">{error}</span>
-                </header>
-                
+                {iconPreview && (
+
+                    <header>
+                        <img
+                            id="edit-profile-icon"
+                            src={iconPreview || 'default-image-url'}
+                            className="edit-profile-icon"
+                            alt="Profile"
+                        />
+                        <input
+                            type="file"
+                            className="icon"
+                            id="icon"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                        />
+                        <span id="error-icon" className="error-message">{error}</span>
+                    </header>
+                )}
+
                 <div className="field">
                     <input
                         className="input"

@@ -3,7 +3,7 @@ import React from 'react';
 import {handleProfile } from './utils';
 import { useNavigate } from 'react-router-dom';
 
-const VerticalNavBar = ({ chatPartner }) => {
+const VerticalNavBar = ({ userInfos }) => {
     const navigate = useNavigate()
     return (
         <div className="vertical-bar">
@@ -18,7 +18,7 @@ const VerticalNavBar = ({ chatPartner }) => {
                 <img
                     src="/images/profile.png"
                     alt="Profile"
-                    onClick={() => handleProfile(chatPartner.username)}
+                    onClick={() => handleProfile(userInfos.username)}
                     style={{ cursor: 'pointer' }}
                 />
             </button>

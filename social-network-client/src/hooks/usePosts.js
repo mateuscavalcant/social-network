@@ -5,7 +5,7 @@ import axios from 'axios';
 export const usePosts = (navigate) => {
     const [posts, setPosts] = useState([]);
     const [content, setContent] = useState('');
-    const [chatPartner, setChatPartner] = useState({ name: '', iconBase64: '' });
+    const [userInfos, setuserInfos] = useState({ name: '', iconBase64: '' });
     const [token, setToken] = useState('');
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export const usePosts = (navigate) => {
         })
         .then(response => {
             setPosts(response.data.posts);
-            setChatPartner(response.data.chatPartner || { name: '', iconBase64: '' });
+            setuserInfos(response.data.userInfos || { name: '', iconBase64: '' });
         })
         .catch(error => {
             console.error("Failed to load posts:", error.response ? error.response.data : error.message);
@@ -60,7 +60,7 @@ export const usePosts = (navigate) => {
         posts,
         content,
         setContent,
-        chatPartner,
+        userInfos,
         handleCreatePost
     };
 };

@@ -4,7 +4,7 @@ import axios from 'axios';
 const useProfile = (username) => {
     const [profile, setProfile] = useState(null);
     const [posts, setPosts] = useState([]);
-    const [chatPartner, setChatPartner] = useState({ name: '', iconBase64: '' });
+    const [userInfos, setuserInfos] = useState({ name: '', iconBase64: '' });
     const [isCurrentUser, setIsCurrentUser] = useState(false);
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const useProfile = (username) => {
                 setIsCurrentUser(response.data.isCurrentUser);
                 document.title = `${response.data.profile.name} / (@${response.data.profile.username})`;
                 setPosts(response.data.posts);
-                setChatPartner(response.data.chatPartner || { name: '', iconBase64: '' });
+                setuserInfos(response.data.userInfos || { name: '', iconBase64: '' });
             })
             .catch(error => {
                 console.error("Failed to fetch profile:", error.response ? error.response.data : error.message);
@@ -56,7 +56,7 @@ const useProfile = (username) => {
             });
     };
 
-    return { profile, posts, chatPartner, isCurrentUser, handleFollow, handleMessage };
+    return { profile, posts, userInfos, isCurrentUser, handleFollow, handleMessage };
 };
 
 export default useProfile;

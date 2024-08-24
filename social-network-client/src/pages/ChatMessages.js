@@ -10,7 +10,7 @@ import '../styles/Chat.css';
 
 const ChatMessages = () => {
   const { username } = useParams(); 
-  const { messages, content, setContent, chatPartner, handleCreateMessage } = useChatMessages(username);
+  const { messages, content, setContent, userInfos, handleCreateMessage } = useChatMessages(username);
   const navigate = useNavigate();
 
 
@@ -29,21 +29,21 @@ const ChatMessages = () => {
               </img>
             </div>
           <div className="header-home-screen">
-            {chatPartner.iconBase64 && (
+            {userInfos.iconBase64 && (
               <img
-                src={`data:image/jpeg;base64,${chatPartner.iconBase64}`}
+                src={`data:image/jpeg;base64,${userInfos.iconBase64}`}
                 className="profile-icon"
                 alt="profile"
-                onClick={() => handleProfile(chatPartner.username)}
+                onClick={() => handleProfile(userInfos.username)}
                 style={{ cursor: 'pointer' }}
               />
             )}
             <div className="header-name">
               <p
-                onClick={() => handleProfile(chatPartner.username)}
+                onClick={() => handleProfile(userInfos.username)}
                 style={{ cursor: 'pointer' }}
               >
-                {chatPartner.name}
+                {userInfos.name}
               </p>
             </div>
           </div>

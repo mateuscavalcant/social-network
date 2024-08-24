@@ -157,20 +157,17 @@ header {
   display: flex;
   justify-content: flex-end;
   margin-top: -190px;
-  margin-right: 200px;
+  margin-right: 140px;
 }
 
-.user-followby,
-.user-followto,
-.posts-count {
+.user-followby, .user-followto, .posts-count {
   right: auto;
-  margin-left: 15px;
+  margin-left: 43px;
   font-weight: bold;
   font-size: 15px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-top: 0;
 }
-
 #posts-name {
   font-weight: normal;
   font-size: 15px;
@@ -594,8 +591,9 @@ header {
   display: flex;
   justify-content: flex-end;
   margin-top: -190px;
-  margin-right: 40%;
+  margin-right: 37%;
 }
+
 
 .profile-btn {
   margin-right: 40%;
@@ -694,4 +692,20 @@ header {
   .create-post-container {
     margin-top: 30px;
   }
+
+  .user-followby, .user-followto, .posts-count {
+    right: auto;
+    margin-left: 25px;
+    font-weight: bold;
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 0;
+}
+
+.create-btn {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -190px;
+  margin-right: 37%;
+}
 }

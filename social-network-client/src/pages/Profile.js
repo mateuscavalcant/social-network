@@ -1,18 +1,17 @@
-
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/Profile.css';
 import VerticalNavBar from '../components/VerticalNavBar';
 import Post from '../components/Post';
-import { handleEditProfile } from '../components/utils';
 import useProfile from '../hooks/useProfile';
-
+import useRedirectEditProfile from '../components/utils';
 
 
 const Profile = () => {
+    const redirectEditProfile = useRedirectEditProfile()
     const { username } = useParams();
     const navigate = useNavigate();
-    const { profile, posts, chatPartner, isCurrentUser, loadProfile } = useProfile(username);
+    const { profile, posts, userInfos, isCurrentUser, loadProfile } = useProfile(username);
 
     const handleFollow = (action) => {
         if (!username) {
@@ -47,7 +46,7 @@ const Profile = () => {
     return (
         <div className="profile-page">
             <div className="bar-btn-container">
-                <VerticalNavBar chatPartner={chatPartner} />
+                <VerticalNavBar userInfos={userInfos} />
             </div>
             <div className="profile-container">
                 <div className="profile-header-container">
@@ -84,8 +83,8 @@ const Profile = () => {
                         <footer>
                             {isCurrentUser && (
                                 <button id="edit-profile-btn"
-                                onClick={handleEditProfile}
-                                style={{ cursor: 'pointer' }}>Edit Profile
+                                    onClick={redirectEditProfile}
+                                    style={{ cursor: 'pointer' }}>Edit Profile
                                 </button>
                             )}
                             <div className='profile-btn'>
