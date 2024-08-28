@@ -1,4 +1,4 @@
-import axios from 'axios';
+
 import { useParams } from 'react-router-dom';
 import '../styles/Profile.css';
 import VerticalNavBar from '../components/VerticalNavBar';
