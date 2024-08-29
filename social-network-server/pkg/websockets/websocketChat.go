@@ -6,9 +6,7 @@ import (
 	"net/http"
 	repo "social-network-server/database"
 	"social-network-server/pkg/models"
-	"social-network-server/pkg/models/errs"
 	"social-network-server/service"
-	"strings"
 
 	"strconv"
 	"sync"
@@ -64,8 +62,8 @@ func (pool *WorkerPool) Submit(job models.UserMessage) {
 	case pool.jobQueue <- job:
 		// Mensagem enviada para o pool com sucesso
 	default:
-		// Buffer cheio, decidir como lidar
-		log.Println("Buffer de mensagens cheio, mensagem será descartada ou reprocessada.")
+		// Buffer de mensagens cheio, mensagem será descartada ou reprocessada.
+		log.Println()
 	}
 }
 
@@ -79,10 +77,10 @@ func processMessage(message models.UserMessage) {
 	if conn, ok := UserConnections[int64(message.MessageTo)]; ok {
 		err := conn.WriteJSON(message)
 		if err != nil {
-			log.Println("Erro ao enviar mensagem:", err)
+			log.Println("Error sending message:", err)
 		}
 	} else {
-		log.Println("Destinatário não está conectado")
+		log.Println("Recipient is not connected")
 	}
 }
 
@@ -127,7 +125,7 @@ func Chat(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"currentUsername": currentUsername,
 		"messages":        messages,
-		"userInfos":     gin.H{"name": userInfosName, "username": userInfosUsername, "iconBase64": userInfosIcon},
+		"userInfos":       gin.H{"name": userInfosName, "username": userInfosUsername, "iconBase64": userInfosIcon},
 	})
 }
 
@@ -165,10 +163,10 @@ func flushMessages(batch []models.UserMessage) {
 			// Enviar todas as mensagens em um único payload JSON
 			err := conn.WriteJSON(batch)
 			if err != nil {
-				log.Println("Erro ao enviar mensagens:", err)
+				log.Println("Error sending messages:", err)
 			}
 		} else {
-			log.Println("Destinatário não está conectado")
+			log.Println("Recipient is not connected")
 		}
 	}
 }
@@ -182,7 +180,7 @@ func StartInactivityTimer(ws *websocket.Conn, userID int) {
 		select {
 		case <-inactivityTimer.C:
 			// Fechar a conexão após 30 segundos de inatividade
-			log.Println("Fechando conexão por inatividade:", userID)
+			log.Println("Closing connection due to inactivity:", userID)
 			ws.Close()
 			delete(UserConnections, int64(userID))
 			return
@@ -209,7 +207,7 @@ func HandleMessages(ws *websocket.Conn, userID int) {
 		var msg models.UserMessage
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			log.Println("Erro ao receber mensagem:", err)
+			log.Println("Error receiving message:", err)
 			return
 		}
 
@@ -242,61 +240,10 @@ func GetUserIDFromContext(c *gin.Context) int {
 		id = int(idFloat)
 
 	} else {
-		log.Println("ID do usuário não encontrado no token ou erro de conversão")
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
 	}
 
 	return id
-}
-
-func CreateNewMessage(c *gin.Context) {
-	var errResp errs.ErrorResponse
-
-	// Parse do corpo da requisição
-	if err := c.Request.ParseForm(); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	username := c.Param("username")
-	content := strings.TrimSpace(c.PostForm("content"))
-	userId, exists := c.Get("id")
-	if !exists {
-		log.Println("User ID not found in session")
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in session"})
-		return
-	}
-
-	id, err := strconv.Atoi(fmt.Sprintf("%v", userId))
-	if err != nil {
-		log.Println("Erro ao converter ID do usuário para int:", err)
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
-		return
-	}
-
-	// Validação básica
-	if content == "" {
-		errResp.Error["content"] = "Values are missing!"
-	}
-	if len(errResp.Error) > 0 {
-		c.JSON(http.StatusBadRequest, errResp)
-		return
-	}
-
-	// Chama o service para enviar a mensagem
-	messageID, err := SendMessage(id, username, content)
-	if err != nil {
-		log.Println("Erro ao enviar mensagem:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send message"})
-		return
-	}
-
-	resp := map[string]interface{}{
-		"messageID": messageID,
-		"message":   "Message sent successfully",
-	}
-
-	c.JSON(http.StatusOK, resp)
 }
 
 func SendMessage(senderID int, receiverUsername, content string) (int64, error) {

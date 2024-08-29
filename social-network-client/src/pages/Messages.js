@@ -4,72 +4,16 @@ import '../styles/chats.css';
 import { usePosts } from '../hooks/usePosts';
 import { useNavigate } from 'react-router-dom';
 import VerticalNavBar from '../components/VerticalNavBar';
+import { useHomeChatMessages } from '../hooks/useHomeMessages';
 
 
 
 const Messages = () => {
     const navigate = useNavigate()
-    const [chats, setChats] = useState([]);
+    const { chats } = useHomeChatMessages();
     const [currentUsername, setCurrentUsername] = useState({ username: '' });
     const [token, setToken] = useState('');
     const { userInfos } = usePosts(navigate);
-
-    useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        if (storedToken) {
-            setToken(storedToken);
-            document.cookie = `token=${storedToken}; path=/; Secure; SameSite=Strict`;
-            loadChats(storedToken);
-        }
-    }, []);
-
-    const loadChats = useCallback(async () => {
-        axios.post("http://localhost:8080/chats", {}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                setChats(response.data.chats);
-                setCurrentUsername(response.data.currentUsername || { username: '' });
-            })
-            .catch(error => {
-                console.error("Failed to load posts:", error.response ? error.response.data : error.message);
-            });
-    });
-
-    const setupWebSocket = useCallback(() => {
-        if (!token) return;
-
-        const wsURL = `ws://localhost:8080/chats`;
-        const ws = new WebSocket(wsURL);
-
-        ws.onopen = () => {
-            console.log('WebSocket connection established.');
-        };
-
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            setChats(data.chats);
-        };
-
-        ws.onclose = () => {
-            console.log('WebSocket connection closed. Reconnecting...');
-            setTimeout(setupWebSocket, 1000);
-            loadChats();
-        };
-
-        return () => {
-            ws.close();
-        };
-    }, [loadChats, token]);
-
-    useEffect(() => {
-        if (token) {
-            loadChats();
-            setupWebSocket();
-        }
-    }, [loadChats, token, setupWebSocket]);
 
     const handleMessage = (username) => {
         const token = localStorage.getItem('token');

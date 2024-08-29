@@ -57,7 +57,7 @@ func Chat(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"currentUsername": gin.H{"username": currentUsername},
 		"messages":        messages,
-		"userInfos":     gin.H{"name": userInfosName, "username": userInfosUsername, "iconBase64": userInfosIcon},
+		"userInfos":       gin.H{"name": userInfosName, "username": userInfosUsername, "iconBase64": userInfosIcon},
 	})
 }
 
@@ -123,7 +123,7 @@ func CreateNewMessage(c *gin.Context) {
 	// Chama o service para enviar a mensagem
 	messageID, err := websockets.SendMessage(id, username, content)
 	if err != nil {
-		log.Println("Erro ao enviar mensagem:", err)
+		log.Println("Error sending message:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send message"})
 		return
 	}

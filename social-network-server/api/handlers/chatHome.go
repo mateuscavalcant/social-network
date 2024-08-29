@@ -5,25 +5,13 @@ import (
 	"log"
 	"net/http"
 	repo "social-network-server/database"
-	"social-network-server/pkg/models"
+	"social-network-server/pkg/websockets"
 	"social-network-server/service"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
-
-// userConnections mapeia IDs de usuário para conexões WebSocket
-// Canais para enviar mensagens
-var (
-	userChatsConnections map[int64]*websocket.Conn
-	chatsQueue           = make(chan models.UserMessage, 100) // Buffer de 100 mensagens
-)
-
-func init() {
-	userChatsConnections = make(map[int64]*websocket.Conn)
-	go handleWebSocketChats()
-}
 
 func FeedChats(c *gin.Context) {
 	userId, exists := c.Get("id")
@@ -61,79 +49,25 @@ func FeedChats(c *gin.Context) {
 }
 
 func WebSocketFeedChats(c *gin.Context) {
-	userId, exists := c.Get("id")
-	if !exists {
-		log.Println("User ID not found in session")
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in session"})
-		return
-	}
-
-	id, errId := strconv.Atoi(fmt.Sprintf("%v", userId))
-	if errId != nil {
-		log.Println("Erro ao converter ID do usuário para int:", errId)
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
-		c.Abort()
-		return
-	}
-
-	ws, err := websocket.Upgrade(c.Writer, c.Request, nil, 4096, 4096)
+	ws, err := websocket.Upgrade(c.Writer, c.Request, nil, 1024, 1024)
 	if err != nil {
 		log.Println("Erro ao atualizar para WebSocket:", err)
 		return
 	}
 	defer ws.Close()
 
-	userChatsConnections[int64(id)] = ws
-	HandleMessagesChats(ws)
-}
-
-// Função para enviar mensagens para o canal
-func sendMessageChats(message models.UserMessage) {
-	chatsQueue <- message
-}
-
-// Função para lidar com as mensagens WebSocket
-func handleWebSocketChats() {
-	const workerCount = 5
-
-	for i := 0; i < workerCount; i++ {
-		go workerChats()
+	userID := websockets.GetUserIDFromContext(c)
+	if userID == 0 {
+		return
 	}
+
+	// Registrar a conexão
+	websockets.UserConnectionsMessages[int64(userID)] = ws
+	log.Println("Conexão WebSocket registrada para o usuário:", userID)
+
+	// Iniciar o controle de inatividade
+	go websockets.StartInactivityTimerMessages(ws, userID)
+
+	// Iniciar o manuseio de mensagens
+	websockets.HandleMessagesFeed(ws, userID)
 }
-
-func workerChats() {
-	for message := range chatsQueue {
-		destConn, ok := userChatsConnections[int64(message.MessageTo)]
-		if !ok {
-			log.Println("Recipient is not connected")
-			continue
-		}
-		err := destConn.WriteJSON(message)
-
-		if err != nil {
-			log.Println("Error sending message: ", err)
-		}
-
-	}
-}
-
-// Enviar mensagens para o canal
-func HandleMessagesChats(ws *websocket.Conn) {
-	defer ws.Close()
-
-	for {
-		var msg models.UserMessage
-		err := ws.ReadJSON(&msg) // Use ReadJSON para ler mensagens JSON do WebSocket
-		if err != nil {
-			log.Println("Error receiving message:", err)
-			return
-		}
-
-		// Envie a mensagem para o canal
-		go sendMessageChats(msg)
-	}
-}
-
-/*
-
- */
