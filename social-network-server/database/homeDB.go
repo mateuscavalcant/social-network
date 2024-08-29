@@ -6,7 +6,6 @@ import (
 	"social-network-server/pkg/models"
 )
 
-// CreateUser inserts a new user into the database.
 func CreatePost(db *sql.DB, userPost models.UserPost, id int) error {
 
 	err := db.QueryRow("SELECT username FROM user WHERE id = ?", id).Scan(&userPost.CreatedBy)

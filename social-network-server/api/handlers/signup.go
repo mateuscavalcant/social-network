@@ -25,7 +25,7 @@ func Signup(c *gin.Context) {
 
 	user.Bio = "Your bio"
 
-	fileBytes, err := ioutil.ReadFile("client/public/images/user-icon.jpg")
+	fileBytes, err := ioutil.ReadFile("social-network-server/pkg/data/user-icon.jpg")
 	if err != nil {
 		log.Println("Error reading file:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read user icon"})

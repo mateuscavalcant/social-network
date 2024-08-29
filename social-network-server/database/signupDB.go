@@ -6,7 +6,6 @@ import (
 	"social-network-server/pkg/models"
 )
 
-// CreateUser inserts a new user into the database.
 func CreateUser(db *sql.DB, user models.User) error {
 	query := "INSERT INTO user (username, name, bio, email, password, icon) VALUES (?, ?, ?, ?, ?, ?)"
 	stmt, err := db.Prepare(query)
@@ -25,7 +24,6 @@ func CreateUser(db *sql.DB, user models.User) error {
 	return nil
 }
 
-// CheckEmailExistence checks if the email already exists in the database.
 func CheckEmailExistence(db *sql.DB, email string) (bool, error) {
 	var count int
 	query := "SELECT COUNT(*) FROM user WHERE email = ?"
