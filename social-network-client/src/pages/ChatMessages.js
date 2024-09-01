@@ -22,7 +22,7 @@ const ChatMessages = () => {
               <img
               src="/images/arrow-back.png"
               alt='back'
-                onClick={() => navigate('/chats')}
+                onClick={() => window.location.replace(`/chats`)}
                 style={{ cursor: 'pointer' }}
               >
                 

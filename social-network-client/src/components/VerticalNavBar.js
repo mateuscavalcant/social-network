@@ -10,7 +10,7 @@ const VerticalNavBar = ({ userInfos }) => {
             <button id="home-btn">
                 <img src="/images/home.png"
                     alt="Home"
-                    onClick={() => navigate('/home')}
+                    onClick={() => window.location.replace(`/`)}
                     style={{ cursor: 'pointer' }}
                 />
             </button>

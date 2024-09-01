@@ -9,35 +9,33 @@ import (
 
 var db *sql.DB
 
-// InitializeDB initializes the database connection pool.
+// InitializeDB inicializa o pool de conexões com o banco de dados.
 func InitializeDB() {
-	// Retrieve database credentials from environment variables.
 	user := "root"
 	password := "2009"
 	_db := "mydb"
 	dbSource := user + ":" + password + "@tcp(localhost:3306)/" + _db
 
-	// Open a connection to the MySQL database.
+	// Abre uma conexão com o banco de dados MySQL.
 	conn, err := sql.Open("mysql", dbSource)
 	if err != nil {
 		log.Fatal("Error connecting to the database:", err)
 	}
 
-	// Set the maximum number of open connections.
-	conn.SetMaxOpenConns(100) // Adjust the value according to your requirements.
+	// Define o número máximo de conexões abertas.
+	conn.SetMaxOpenConns(100)
 
-	// Ping the database to ensure the connection is successful.
+	// Testa a conexão com o banco de dados para garantir que a conexão foi bem-sucedida.
 	err = conn.Ping()
 	if err != nil {
 		log.Fatal("Error pinging the database:", err)
 	}
 
-	// Set the package-level `db` variable to the connection.
 	db = conn
 }
 
-// GetDB returns the connection to the MySQL database.
+// GetDB retorna a conexão com o banco de dados MySQL.
 func GetDB() *sql.DB {
-	// Return the existing database connection.
+	// Retorna a conexão existente com o banco de dados.
 	return db
 }

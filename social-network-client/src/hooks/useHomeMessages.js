@@ -24,8 +24,8 @@ export const useHomeChatMessages = () => {
   }, [token]);
 
   const setupWebSocket = useCallback(() => {
-    if (!cookie) return;
-    const wsURL = `ws://localhost:8080/websocket/chats`;
+    if (!token) return;
+    const wsURL = `ws://localhost:8080/websokcet/chats`;
     const ws = new WebSocket(wsURL);
 
     ws.onopen = () => console.log('WebSocket connection established.');

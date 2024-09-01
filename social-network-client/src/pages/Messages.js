@@ -12,11 +12,11 @@ const Messages = () => {
     const navigate = useNavigate()
     const { chats } = useHomeChatMessages();
     const [currentUsername, setCurrentUsername] = useState({ username: '' });
-    const [token, setToken] = useState('');
+    const token = localStorage.getItem('token');
     const { userInfos } = usePosts(navigate);
 
     const handleMessage = (username) => {
-        const token = localStorage.getItem('token');
+        
         axios.post(`http://localhost:8080/chat/${username}`, {}, {
             headers: { Authorization: `Bearer ${token}` }
         })
