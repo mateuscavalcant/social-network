@@ -1,12 +1,12 @@
-package database
+package repositories
 
 import (
 	"database/sql"
 	"encoding/base64"
 	"errors"
 	"log"
-	"social-network-server/pkg/database"
-	"social-network-server/pkg/models"
+	"social-network-server/config/database"
+	"social-network-server/internal/models"
 )
 
 type UserRepository struct {

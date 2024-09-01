@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	repo "social-network-server/database"
-	"social-network-server/pkg/models"
-	"social-network-server/service"
+	"social-network-server/internal/models"
+	"social-network-server/pkg/repositories"
+	"social-network-server/pkg/service"
 
 	"strconv"
 	"sync"
@@ -99,7 +99,7 @@ func Chat(c *gin.Context) {
 	}
 
 	username := c.Param("username")
-	partnerID, err := repo.MessageGetUserIDByUsername(username)
+	partnerID, err := repositories.MessageGetUserIDByUsername(username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user ID"})
 		return
@@ -110,7 +110,7 @@ func Chat(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve messages"})
 		return
 	}
-	currentUsername, err := repo.GetUsernameByID(id)
+	currentUsername, err := repositories.GetUsernameByID(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user Username"})
 		return
@@ -248,7 +248,7 @@ func GetUserIDFromContext(c *gin.Context) int {
 
 func SendMessage(senderID int, receiverUsername, content string) (int64, error) {
 	// Obtém o ID do usuário destinatário
-	receiverID, err := repo.MessageGetUserIDByUsername(receiverUsername)
+	receiverID, err := repositories.MessageGetUserIDByUsername(receiverUsername)
 	if err != nil {
 		log.Println("Erro ao obter ID do destinatário:", err)
 		return 0, err
@@ -262,7 +262,7 @@ func SendMessage(senderID int, receiverUsername, content string) (int64, error) 
 	}
 
 	// Salva a mensagem no banco de dados
-	messageID, err := repo.SaveMessage(message)
+	messageID, err := repositories.SaveMessage(message)
 	if err != nil {
 		log.Println("Erro ao salvar a mensagem:", err)
 		return 0, err

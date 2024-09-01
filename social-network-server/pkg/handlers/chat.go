@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	repo "social-network-server/database"
-	"social-network-server/pkg/models/errs"
+	"social-network-server/internal/models/errs"
+	"social-network-server/pkg/repositories"
+	"social-network-server/pkg/service"
 	"social-network-server/pkg/websockets"
-	"social-network-server/service"
 	"strings"
 
 	"strconv"
@@ -31,7 +31,7 @@ func Chat(c *gin.Context) {
 	}
 
 	username := c.Param("username")
-	partnerID, err := repo.MessageGetUserIDByUsername(username)
+	partnerID, err := repositories.MessageGetUserIDByUsername(username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user ID"})
 		return
@@ -42,7 +42,7 @@ func Chat(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve messages"})
 		return
 	}
-	currentUsername, err := repo.GetUsernameByID(id)
+	currentUsername, err := repositories.GetUsernameByID(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user Username"})
 		return

@@ -1,9 +1,9 @@
-package database
+package repositories
 
 import (
 	"database/sql"
 	"log"
-	"social-network-server/pkg/models"
+	"social-network-server/internal/models"
 )
 
 // GetUserByIdentifier obtém o usuário do banco de dados com base no identificador (email ou nome de usuário).

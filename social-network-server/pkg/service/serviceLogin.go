@@ -3,8 +3,8 @@ package service
 import (
 	"database/sql"
 	"os"
-	"social-network-server/database"
-	"social-network-server/pkg/models"
+	"social-network-server/internal/models"
+	"social-network-server/pkg/repositories"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
@@ -14,7 +14,7 @@ import (
 // AuthenticateUser autentica o usuário com base no identificador e senha fornecidos.
 func AuthenticateUser(db *sql.DB, identifier, password string) (models.User, error) {
 	isEmail := strings.Contains(identifier, "@")
-	user, err := database.GetUserByIdentifier(db, identifier, isEmail)
+	user, err := repositories.GetUserByIdentifier(db, identifier, isEmail)
 	if err != nil {
 		return user, err
 	}

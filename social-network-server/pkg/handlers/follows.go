@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"social-network-server/pkg/database"
-	"social-network-server/pkg/models"
+	"social-network-server/config/database"
+	"social-network-server/internal/models"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

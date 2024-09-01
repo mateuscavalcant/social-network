@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"social-network-server/api/handlers"
-	middlewares "social-network-server/api/middleware"
+	"social-network-server/pkg/handlers"
+	"social-network-server/pkg/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,7 +13,7 @@ func InitRoutes(r *gin.RouterGroup) {
 	r.POST("/validate-username", handlers.ExistUsername)
 	r.POST("/login", handlers.UserLogin)
 
-	r.Use(middlewares.AuthMiddleware())
+	r.Use(middleware.AuthMiddleware())
 
 	r.POST("/create-post", handlers.CreateNewPost)
 	r.POST("/follow", handlers.Follow)

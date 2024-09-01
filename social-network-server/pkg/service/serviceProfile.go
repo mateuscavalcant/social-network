@@ -1,17 +1,17 @@
 package service
 
 import (
-	"social-network-server/database"
-	"social-network-server/pkg/models"
+	"social-network-server/internal/models"
+	"social-network-server/pkg/repositories"
 )
 
 type UserServiceProfile struct {
-	userRepo *database.UserRepository
+	userRepo *repositories.UserRepository
 }
 
 func NewUserServiceProfile() *UserServiceProfile {
 	return &UserServiceProfile{
-		userRepo: database.NewUserRepository(),
+		userRepo: repositories.NewUserRepository(),
 	}
 }
 

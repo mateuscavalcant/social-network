@@ -1,12 +1,12 @@
-package database
+package repositories
 
 import (
 	"database/sql"
 	"errors"
 	"fmt"
 	"log"
-	"social-network-server/pkg/database"
-	"social-network-server/pkg/models"
+	"social-network-server/config/database"
+	"social-network-server/internal/models"
 )
 
 func MessageGetUserIDByUsername(username string) (int, error) {

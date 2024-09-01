@@ -1,10 +1,10 @@
-package database
+package repositories
 
 import (
 	"database/sql"
 	"encoding/base64"
 	"fmt"
-	"social-network-server/pkg/models"
+	"social-network-server/internal/models"
 )
 
 func FetchUserChats(db *sql.DB, userID int64) ([]models.UserMessage, error) {

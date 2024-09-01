@@ -3,8 +3,8 @@ package service
 import (
 	"database/sql"
 
-	"social-network-server/database"
-	"social-network-server/pkg/models"
+	"social-network-server/internal/models"
+	"social-network-server/pkg/repositories"
 	"social-network-server/pkg/validators"
 )
 
@@ -28,7 +28,7 @@ func SignupService(db *sql.DB, user models.User) (map[string]string, error) {
 	if err := validators.ValidateFormatEmail(user.Email); err != nil {
 		resp["email"] = "Invalid email format!"
 	}
-	existEmail, err := database.CheckEmailExistence(db, user.Email)
+	existEmail, err := repositories.CheckEmailExistence(db, user.Email)
 	if err != nil {
 		return resp, err
 	}
@@ -53,7 +53,7 @@ func SignupService(db *sql.DB, user models.User) (map[string]string, error) {
 	}
 	user.Password = hashedPassword
 
-	err = database.CreateUser(db, user)
+	err = repositories.CreateUser(db, user)
 	if err != nil {
 		return nil, err
 	}

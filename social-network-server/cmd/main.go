@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 	"social-network-server/api/routes"
-	"social-network-server/pkg/database"
+	"social-network-server/config/database"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/gzip"

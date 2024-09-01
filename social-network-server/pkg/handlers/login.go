@@ -3,9 +3,9 @@ package handlers
 import (
 	"log"
 	"net/http"
-	"social-network-server/pkg/database"
-	"social-network-server/pkg/models/errs"
-	"social-network-server/service"
+	"social-network-server/config/database"
+	"social-network-server/internal/models/errs"
+	"social-network-server/pkg/service"
 	"strings"
 
 	"github.com/gin-gonic/gin"

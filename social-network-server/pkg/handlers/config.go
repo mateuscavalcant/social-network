@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"log"
-	"social-network-server/pkg/database"
-	"social-network-server/pkg/models"
+	"social-network-server/config/database"
+	"social-network-server/internal/models"
 
-	"social-network-server/pkg/models/errs"
+	"social-network-server/internal/models/errs"
 
 	"social-network-server/api/utils"
 

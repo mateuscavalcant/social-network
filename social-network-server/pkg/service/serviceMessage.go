@@ -4,15 +4,15 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log"
-	"social-network-server/database"
-	"social-network-server/pkg/models"
+	"social-network-server/internal/models"
+	"social-network-server/pkg/repositories"
 
 	"time"
 )
 
 // Obter mensagens entre usuários e processá-las
 func GetChatMessages(user1ID, user2ID int) ([]models.UserMessage, error) {
-	messages, err := database.GetUserMessages(user1ID, user2ID, 30, 0)
+	messages, err := repositories.GetUserMessages(user1ID, user2ID, 30, 0)
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving messages: %w", err)
 	}
@@ -36,7 +36,7 @@ func GetChatMessages(user1ID, user2ID int) ([]models.UserMessage, error) {
 
 // Obter informações de parceiro de chat
 func GetuserInfosInfo(userID int) (string, string, string, error) {
-	name, username, icon, err := database.GetUserInfo(userID)
+	name, username, icon, err := repositories.GetUserInfo(userID)
 	if err != nil {
 		return "", "", "", fmt.Errorf("error retrieving chat partner info: %w", err)
 	}

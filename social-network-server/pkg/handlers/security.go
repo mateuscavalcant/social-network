@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"log"
-	"social-network-server/pkg/models/errs"
+	"social-network-server/internal/models/errs"
 
 	"social-network-server/pkg/validators"
 	"strings"

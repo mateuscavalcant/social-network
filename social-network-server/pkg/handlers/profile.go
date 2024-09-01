@@ -5,9 +5,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"social-network-server/pkg/database"
-	"social-network-server/pkg/models/errs"
-	"social-network-server/service"
+	"social-network-server/config/database"
+	"social-network-server/internal/models/errs"
+	"social-network-server/pkg/service"
 	"strconv"
 	"strings"
 
@@ -43,7 +43,7 @@ func Profile(c *gin.Context) {
 		"posts":         posts,
 		"icon":          profile.IconBase64,
 		"isCurrentUser": isCurrentUser,
-		"userInfos":   userInfos,
+		"userInfos":     userInfos,
 	})
 }
 

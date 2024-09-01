@@ -2,7 +2,7 @@ package websockets
 
 import (
 	"log"
-	"social-network-server/pkg/models"
+	"social-network-server/internal/models"
 
 	"sync"
 	"time"

@@ -1,9 +1,9 @@
-package database
+package repositories
 
 import (
 	"database/sql"
 	"log"
-	"social-network-server/pkg/models"
+	"social-network-server/internal/models"
 )
 
 func CreatePost(db *sql.DB, userPost models.UserPost, id int) error {
