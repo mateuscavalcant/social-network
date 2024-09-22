@@ -9,6 +9,7 @@ import Messages from './pages/Messages';
 import ChatMessages from './pages/ChatMessages';
 import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile';
+import Search from './pages/Search';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/:username" element={<Profile />} />
           <Route path="/chat/:username" element={<ChatMessages />} />
           <Route path="/chats" element={<Messages />} />
+          <Route path="/search" element={<Search />} />
         </Routes>
       </div>
     </Router>

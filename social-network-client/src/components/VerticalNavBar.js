@@ -23,7 +23,13 @@ const VerticalNavBar = ({ userInfos }) => {
                 />
             </button>
             <button id="search-btn">
-                <img src="/images/search.png" alt="Search" />
+                <img 
+                src="/images/search.png" alt="Search"
+                onClick={() => navigate('/search')}
+                style={{ cursor: 'pointer' }}
+
+                 />
+                
             </button>
             <button id='envelope-btn'>
                 <img

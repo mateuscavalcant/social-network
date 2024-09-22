@@ -27,5 +27,6 @@ func InitRoutes(r *gin.RouterGroup) {
 	r.GET("/websocket/:username", handlers.WebSocketHandler)
 	r.POST("/chats", handlers.FeedChats)
 	r.GET("/websocket/chats", handlers.WebSocketFeedChats)
+	r.POST("/search", handlers.SearchEngine)
 
 }
